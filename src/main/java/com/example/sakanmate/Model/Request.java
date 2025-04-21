@@ -18,7 +18,7 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private boolean state;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "request")
     private Set<Renter> renters;
     //private Apartment apartment;
 }
