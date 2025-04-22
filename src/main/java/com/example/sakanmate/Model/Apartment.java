@@ -53,4 +53,7 @@ public class Apartment {
     @JsonIgnore
     private Owner owner;
 
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "apartment")
+    private Set<Complaint> complaint;
+
 }

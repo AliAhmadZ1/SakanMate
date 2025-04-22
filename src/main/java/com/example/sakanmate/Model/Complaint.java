@@ -28,4 +28,9 @@ public class Complaint {
     @JoinColumn(name = "renter_complaint_id", referencedColumnName = "id")
     @JsonIgnore
     private Renter renter;
+
+    @ManyToOne
+    @JoinColumn(name = "apartment_complaint_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Apartment apartment;
 }
