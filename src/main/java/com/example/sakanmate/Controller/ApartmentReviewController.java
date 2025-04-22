@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +14,9 @@ public class ApartmentReviewController {
 
     private final ApartmentReviewService apartmentReviewService;
 
-    @GetMapping("/get/{apartmentId}")
-    public ResponseEntity getByApartment(@PathVariable Integer apartmentId) {
-        return ResponseEntity.ok( apartmentReviewService.getByApartment(apartmentId));
+    @GetMapping("/get")
+    public ResponseEntity getByApartment() {
+        return ResponseEntity.ok( apartmentReviewService.getByApartment());
     }
 
     @PostMapping("/add")
@@ -26,11 +25,11 @@ public class ApartmentReviewController {
         return ResponseEntity.ok("Review submitted.");
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<String> updateReview(@PathVariable Integer id, @RequestBody ApartmentReviewDTO dto) {
-//        apartmentReviewService.updateReview( dto);
-//        return ResponseEntity.ok("Review updated successfully.");
-//    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateReview(@PathVariable Integer id, @RequestBody ApartmentReviewDTO dto) {
+        apartmentReviewService.updateReview( dto);
+        return ResponseEntity.ok("Review updated successfully.");
+    }
 
 
     @DeleteMapping("/delete/{id}")

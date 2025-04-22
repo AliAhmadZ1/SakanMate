@@ -14,8 +14,8 @@ public class ApartmentReviewService {
 
     private ApartmentReviewRepository repo;
 
-    public List<ApartmentReview> getByApartment(Integer apartmentId) {
-        return repo.findByApartmentId(apartmentId);
+    public List<ApartmentReview> getByApartment() {
+        return repo.findAll();
     }
 
     public void addReview(ApartmentReviewDTO dto) {
@@ -23,22 +23,21 @@ public class ApartmentReviewService {
         review.setRating(dto.getRating());
         review.setDescription(dto.getDescription());
         review.setApartmentId(dto.getApartmentId());
-        review.setRenterId(dto.getRenterId());
         repo.save(review);
     }
 
-//    public void updateReview( ApartmentReviewDTO dto) {
-//        ApartmentReview review = repo.findByApartmentId(dto.getRenterId());
-//
-//
-//
-//        review.setRating(dto.getRating());
-//        review.setDescription(dto.getDescription());
-//        review.setApartmentId(dto.getApartmentId());
-//        review.setRenterId(dto.getRenterId());
-//
-//        repo.save(review);
-//    }
+    public void updateReview( ApartmentReviewDTO dto) {
+        ApartmentReview review = repo.findApartmentReviewById(dto.getRenterId());
+        if (review==null){
+            throw new ArithmeticException();
+        }
+
+        review.setRating(dto.getRating());
+        review.setDescription(dto.getDescription());
+        review.setApartmentId(dto.getApartmentId());
+
+        repo.save(review);
+    }
 
     public void deleteReview(Integer id) {
         repo.deleteById(id);
