@@ -1,5 +1,7 @@
 package com.example.sakanmate.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +29,26 @@ public class Post {
 
     private LocalDate postDate;
 
-    private Integer admin_id;
-
     private Integer owner_id;
+
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Admin admin;
+
+    @OneToOne
+    @MapsId
+    @JsonIgnore
+    private Apartment apartment;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Owner owner;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private Set<Request> request;
+
+
 }

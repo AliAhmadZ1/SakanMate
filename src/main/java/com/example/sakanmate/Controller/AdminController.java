@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1/sakan-mate/admin")
 public class AdminController {
 
     private final AdminService service;

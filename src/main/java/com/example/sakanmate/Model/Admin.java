@@ -1,13 +1,12 @@
 package com.example.sakanmate.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Setter
 @Getter
@@ -15,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,5 +22,11 @@ public class Admin {
     private String name;
     private String email;
     private String password;
-    private String type;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "admin")
+    private Set<Complaint> complaint;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "admin")
+    private Set<Post> post;
+
 }

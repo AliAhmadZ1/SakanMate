@@ -29,6 +29,7 @@ public class Renter {
     private String email;
     @NotEmpty(message = "The password can not be empty.")
     private String password;
+
     @ManyToOne
     @JoinColumn(name = "contract_renter_id", referencedColumnName = "id")
     @JsonIgnore
@@ -36,5 +37,7 @@ public class Renter {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "request")
     @JsonIgnore
     private Set<Request> requests;
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "renter")
+    private Set<Complaint> complaint;
 
 }

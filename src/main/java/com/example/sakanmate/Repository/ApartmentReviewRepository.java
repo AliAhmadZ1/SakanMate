@@ -8,6 +8,7 @@ import java.util.List;
 @Repository
 public interface ApartmentReviewRepository extends JpaRepository<ApartmentReview,Integer> {
 
-    List<ApartmentReview> findByApartmentId(Integer apartmentId);
+    ApartmentReview findApartmentReviewById(Integer id);
+    List<ApartmentReview> findApartmentReviewByApartmentId(Integer apartmentId);
 
 }

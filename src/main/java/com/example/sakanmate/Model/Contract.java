@@ -1,5 +1,6 @@
 package com.example.sakanmate.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -35,8 +36,17 @@ public class Contract {
     @Future
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime endDate;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
     private Set<Renter> renters;
-    //private Apartment apartment;
-    //private Owner owner;
+
+    @OneToOne
+    @MapsId
+    @JsonIgnore
+    private Apartment apartment;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private Owner owner;
 }

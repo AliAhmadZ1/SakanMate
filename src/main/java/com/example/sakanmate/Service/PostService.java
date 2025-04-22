@@ -30,7 +30,6 @@ public class PostService {
             throw new ApiException("Post not found");
 
         oldPost.setStatus(post.getStatus());
-        oldPost.setAdmin_id(post.getAdmin_id());
         oldPost.setOwner_id(post.getOwner_id());
         postRepository.save(oldPost);
     }
