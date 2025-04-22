@@ -2,14 +2,8 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.RenterDtoOut;
-import com.example.sakanmate.Model.Contract;
-import com.example.sakanmate.Model.Post;
-import com.example.sakanmate.Model.Renter;
-import com.example.sakanmate.Model.Request;
-import com.example.sakanmate.Repository.ContractRepository;
-import com.example.sakanmate.Repository.PostRepository;
-import com.example.sakanmate.Repository.RenterRepository;
-import com.example.sakanmate.Repository.RequestRepository;
+import com.example.sakanmate.Model.*;
+import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +18,7 @@ public class RenterService {
     private final PostRepository postRepository;
     private final RequestRepository requestRepository;
     private final ContractRepository contractRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public List<RenterDtoOut> getAllRenters() {
         List<Renter> renters = renterRepository.findAll();
@@ -131,7 +126,19 @@ public class RenterService {
         contract.getRenters().add(renter);
     }
 
-    public void requestContractRenew(){
-        //request contract
+    public void FileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
+        // Check if the renter exists in the database.
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter == null) throw new ApiException("Renter not found.");
+
+        // Check if the contract exists in the database.
+        Apartment apartment = apartmentRepository.findApartmentById(apartmentId);
+        if (apartment == null) throw new ApiException("Apartment not found.");
+
+        // Check if the apartment does not belong to the renter
+        if(!apartment.getContract().getRenters().contains(renter)) throw new ApiException("The apartment does not belong to the renter.");
+
+        // Make the complaint
+        Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
     }
 }
