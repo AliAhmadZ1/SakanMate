@@ -28,6 +28,8 @@ public class ApartmentReview {
     private Integer apartmentId;
 
     @ManyToOne
+    @JoinColumn
+    @JsonIgnore
     private Renter renter;
 
     @ManyToOne

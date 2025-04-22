@@ -21,8 +21,15 @@ public class Request {
     private Integer id;
     @Pattern(regexp = "accepted|rejected|pending|canceled")
     private String state;
+
+
     @ManyToOne
     @JoinColumn(name = "request_renter_id", referencedColumnName = "id")
     @JsonIgnore
     private Renter renter;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private Post post;
 }

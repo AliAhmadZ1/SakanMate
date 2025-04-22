@@ -47,7 +47,8 @@ public class Post {
     @JsonIgnore
     private Owner owner;
 
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private Set<Request> request;
 
 
 }

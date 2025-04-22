@@ -23,7 +23,11 @@ public class Complaint {
     private Integer renterId;
 
     @ManyToOne
-    @JoinColumn(name = "complaint_id", referencedColumnName = "id")
+    @JoinColumn(name = "admin_complaint_id", referencedColumnName = "id")
     @JsonIgnore
     private Admin admin;
+    @ManyToOne
+    @JoinColumn(name = "renter_complaint_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Renter renter;
 }

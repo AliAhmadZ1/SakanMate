@@ -36,10 +36,9 @@ public class Contract {
     @Future
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime endDate;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
     private Set<Renter> renters;
-
-    //private Owner owner;
 
     @OneToOne
     @MapsId
