@@ -130,4 +130,8 @@ public class RenterService {
         // Add the renter to the contract renters * renter accepting the contract.
         contract.getRenters().add(renter);
     }
+
+    public void requestContractRenew(){
+        //request contract
+    }
 }
