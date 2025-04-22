@@ -1,13 +1,13 @@
 package com.example.sakanmate.Model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -32,5 +32,22 @@ public class Apartment {
     private String document_number;
 
     private Integer owner_id;
+
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
+    @PrimaryKeyJoinColumn
+    private Post post;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
+    private Set<ApartmentReview> apartmentReviews;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
+    @PrimaryKeyJoinColumn
+    private Contract contract;
+
+    @ManyToOne
+    @JoinColumn(name = "apartment_id" , referencedColumnName = "id")
+    @JsonIgnore
+    private Owner owner;
 
 }

@@ -1,12 +1,11 @@
 package com.example.sakanmate.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +22,15 @@ public class Owner {
     private String email;
 
     private String password;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
+    private Set<Apartment> apartment;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
+    private Set<Post> post;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
+    private Set<Contract> contract;
+
 
 }
