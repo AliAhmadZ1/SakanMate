@@ -2,9 +2,7 @@ package com.example.sakanmate.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +25,9 @@ public class Request {
     private String state;
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime requestDate;
-    @Column(columnDefinition = "datetime not null")
-    @Future
-    private LocalDateTime startDate;
-    @Column(columnDefinition = "datetime not null")
-    @Future
-    private LocalDateTime endDate;
+    @NotNull(message = "The months can not be null.")
+    @Column(columnDefinition = "int not null")
+    private int months;
     @ManyToOne
     @JoinColumn(name = "renter_id", referencedColumnName = "id")
     @JsonIgnore
