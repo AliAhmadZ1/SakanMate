@@ -31,12 +31,14 @@ public class Renter {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "contract_renter_id", referencedColumnName = "id")
+    @JoinColumn(name = "contract_id")
     @JsonIgnore
     private Contract contract;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "request")
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "renter")
     @JsonIgnore
     private Set<Request> requests;
+
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "renter")
     private Set<Complaint> complaint;
 

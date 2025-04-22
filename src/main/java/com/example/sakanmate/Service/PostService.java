@@ -28,9 +28,7 @@ public class PostService {
         Post oldPost = postRepository.findPostById(id);
         if (oldPost==null)
             throw new ApiException("Post not found");
-
         oldPost.setStatus(post.getStatus());
-        oldPost.setOwner_id(post.getOwner_id());
         postRepository.save(oldPost);
     }
 

@@ -41,12 +41,11 @@ public class Contract {
     private Set<Renter> renters;
 
     @OneToOne
-    @MapsId
     @JsonIgnore
     private Apartment apartment;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     @JsonIgnore
     private Owner owner;
 }

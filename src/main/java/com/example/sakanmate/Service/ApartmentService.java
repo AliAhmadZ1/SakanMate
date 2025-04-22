@@ -33,7 +33,6 @@ public class ApartmentService {
         oldApartment.setMax_renter(apartment.getMax_renter());
         oldApartment.setDocument_number(apartment.getDocument_number());
         oldApartment.setNumber_of_remaining(apartment.getNumber_of_remaining());
-        oldApartment.setOwner_id(apartment.getOwner_id());
         apartmentRepository.save(oldApartment);
     }
 

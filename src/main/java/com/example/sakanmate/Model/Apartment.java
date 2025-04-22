@@ -31,7 +31,6 @@ public class Apartment {
 
     private String document_number;
 
-    private Integer owner_id;
 
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")

@@ -23,14 +23,14 @@ public class Owner {
 
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
-    private Set<Apartment> apartment;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Apartment> apartments;  // Rename to plural for clarity
 
-    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
-    private Set<Post> post;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Post> posts;
 
-    @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
-    private Set<Contract> contract;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Contract> contracts;
 
 
 }

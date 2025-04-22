@@ -11,6 +11,7 @@ import com.example.sakanmate.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,11 +73,11 @@ public class RenterService {
 
         // Make the request (make the request object) and mark the request status as pending.
         //*******************ERROR***************
-//        Request request = new Request(null, "pending", renter);
-//        renter.getRequests().add(request);
-//
-//        // Save the objects in the database.
-//        requestRepository.save(request);
+        Request request = new Request(null, "pending", LocalDateTime.now(), renter, post);
+        renter.getRequests().add(request);
+
+        // Save the objects in the database.
+        requestRepository.save(request);
         //*******************ERROR***************
         renterRepository.save(renter);
     }

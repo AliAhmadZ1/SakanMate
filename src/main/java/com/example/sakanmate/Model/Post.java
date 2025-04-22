@@ -29,9 +29,6 @@ public class Post {
 
     private LocalDate postDate;
 
-    private Integer owner_id;
-
-
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @JsonIgnore
