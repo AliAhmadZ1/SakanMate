@@ -2,6 +2,8 @@ package com.example.sakanmate.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +25,14 @@ public class Request {
     //The request is initially pending, can be accepted and rejected by the owner and can be can canceled by the requester (The renter).
     @Pattern(regexp = "accepted|rejected|pending|canceled")
     private String state;
-
+    @Column(columnDefinition = "datetime not null")
     private LocalDateTime requestDate;
-
+    @Column(columnDefinition = "datetime not null")
+    @Future
+    private LocalDateTime startDate;
+    @Column(columnDefinition = "datetime not null")
+    @Future
+    private LocalDateTime endDate;
     @ManyToOne
     @JoinColumn(name = "renter_id", referencedColumnName = "id")
     @JsonIgnore
