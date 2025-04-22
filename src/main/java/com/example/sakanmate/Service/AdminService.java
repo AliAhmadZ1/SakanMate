@@ -5,14 +5,17 @@ import com.example.sakanmate.Repository.AdminRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class AdminService {
 
     private AdminRepository repo;
 
-    public Admin getAllAdmin(Integer id) {
-        return repo.findAdminsById(id);
+    public List<Admin> getAllAdmin( ) {
+
+        return repo.findAll();
     }
 
     public void addAdmin(Admin admin) {

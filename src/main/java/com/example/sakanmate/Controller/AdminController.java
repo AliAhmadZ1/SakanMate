@@ -19,9 +19,9 @@ public class AdminController {
         return ResponseEntity.ok("Admin registered.");
     }
 
-    @GetMapping("/profile/{id}")
-    public ResponseEntity getAllAdmin(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.getAllAdmin(id));
+    @GetMapping("/profile")
+    public ResponseEntity getAllAdmin() {
+        return ResponseEntity.ok(service.getAllAdmin());
     }
 
     @PutMapping("/update/{id}")
