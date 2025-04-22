@@ -26,11 +26,11 @@ public class ApartmentReviewController {
         return ResponseEntity.ok("Review submitted.");
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateReview(@PathVariable Integer id, @RequestBody ApartmentReviewDTO dto) {
-        apartmentReviewService.updateReview( dto);
-        return ResponseEntity.ok("Review updated successfully.");
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<String> updateReview(@PathVariable Integer id, @RequestBody ApartmentReviewDTO dto) {
+//        apartmentReviewService.updateReview( dto);
+//        return ResponseEntity.ok("Review updated successfully.");
+//    }
 
 
     @DeleteMapping("/delete/{id}")
