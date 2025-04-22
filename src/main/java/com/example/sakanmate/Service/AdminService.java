@@ -68,9 +68,6 @@ public class AdminService {
         // Get the post
         Post post = request.getPost();
 
-        // Check if there is less than 2 requests for the apartment.
-        if(post.getNumberOfApprovedRequests() < 2) throw new ApiException("Apartment must have at least two renters.");
-
         // Calculate the total price.
         double totalPrice = request.getPost().getApartment().getMonthlyPrice() * request.getMonths();
 
