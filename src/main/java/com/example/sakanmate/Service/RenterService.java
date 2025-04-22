@@ -55,7 +55,7 @@ public class RenterService {
 
     //1-
     // This is where the request get asked by the user given the post id and the renter id
-    public void requestApartment(Integer renterId, Integer postId) {
+    public void requestApartment(Integer renterId, Integer postId, int months) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
@@ -71,14 +71,15 @@ public class RenterService {
             case "rented" -> throw new ApiException("This apartment has been rented.");
         }
 
+        // Check the months
+        if(months < 1) throw new ApiException("The months need to greater than 1.");
+
         // Make the request (make the request object) and mark the request status as pending.
-        //*******************ERROR***************
-        Request request = new Request(null, "pending", LocalDateTime.now(), renter, post);
+        Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
         renter.getRequests().add(request);
 
         // Save the objects in the database.
         requestRepository.save(request);
-        //*******************ERROR***************
         renterRepository.save(renter);
     }
 
