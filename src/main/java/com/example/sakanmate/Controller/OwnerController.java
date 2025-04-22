@@ -2,6 +2,7 @@ package com.example.sakanmate.Controller;
 
 import com.example.sakanmate.Api.ApiResponse;
 import com.example.sakanmate.Model.Owner;
+import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Service.OwnerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,9 @@ public class OwnerController {
         return ResponseEntity.status(200).body(new ApiResponse("Request Rejected."));
     }
 
+    @GetMapping("/get-owner-pending-requests/{ownerId}")
+    public ResponseEntity<List<Request>> getOwnerPendingRequests(@PathVariable Integer ownerId){
+        return ResponseEntity.status(200).body(ownerService.getOwnerPendingRequests(ownerId));
+    }
 
 }

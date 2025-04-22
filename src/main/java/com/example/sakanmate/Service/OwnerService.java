@@ -16,7 +16,6 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
     private final RequestRepository requestRepository;
-
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
     }
@@ -50,10 +49,19 @@ public class OwnerService {
         Request request = requestRepository.findRequestById(requestId);
 
         // Validate the objects.
-        validateOwnerAndRequest(owner, request);
+        if (owner == null)
+            throw new ApiException("Owner not found");
+        if (request == null)
+            throw new ApiException("Request not found");
+        if (request.getPost().getOwner() != owner)
+            throw new ApiException("The given request does not belong to the given owner.");
 
         // Check the request status.
-        checkTheRequestStatus(request.getState());
+        switch (request.getState()) {
+            case "accepted" -> throw new ApiException("Request has been already accepted");
+            case "rejected" -> throw new ApiException("Request has been rejected.");
+            case "canceled" -> throw new ApiException("The request has been canceled.");
+        }
 
         // Accept the request.
         request.setState("accepted");
@@ -70,10 +78,19 @@ public class OwnerService {
         Request request = requestRepository.findRequestById(requestId);
 
         // Validate the objects.
-        validateOwnerAndRequest(owner, request);
+        if (owner == null)
+            throw new ApiException("Owner not found");
+        if (request == null)
+            throw new ApiException("Request not found");
+        if (request.getPost().getOwner() != owner)
+            throw new ApiException("The given request does not belong to the given owner.");
 
         // Check the request status.
-        checkTheRequestStatus(request.getState());
+        switch (request.getState()) {
+            case "accepted" -> throw new ApiException("Request has been already accepted");
+            case "rejected" -> throw new ApiException("Request has been rejected.");
+            case "canceled" -> throw new ApiException("The request has been canceled.");
+        }
 
         // Reject the request.
         request.setState("rejected");
@@ -83,25 +100,20 @@ public class OwnerService {
         // Send a notification.
     }
 
-    public void checkTheRequestStatus(String status) {
-        switch (status) {
-            case "accepted" -> throw new ApiException("Request has been already accepted");
-            case "rejected" -> throw new ApiException("Request has been rejected.");
-            case "canceled" -> throw new ApiException("The request has been canceled.");
-        }
-    }
 
-    public void validateOwnerAndRequest(Owner owner, Request request) {
-        if (owner == null)
-            throw new ApiException("Owner not found");
-        if (request == null)
-            throw new ApiException("Request not found");
-        if (request.getPost().getOwner() != owner)
-            throw new ApiException("The given request does not belong to the given owner.");
-    }
+    public List<Request> getOwnerPendingRequests(Integer ownerId) {
+        // Get the owner and check if the owner in the database.
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner == null) throw new ApiException("Owner not found");
 
-    public void getOwnerPendingRequests(){
+        // Get the pending requests.
+        List<Request> pendingRequests = requestRepository.findRequestsByOwnerAndStatus(ownerId);
 
+        // Check if the owner has pending requests.
+        if (pendingRequests.isEmpty()) throw new ApiException("There are no pending requests.");
+
+        // Return the requests.
+        return pendingRequests;
     }
 
 
