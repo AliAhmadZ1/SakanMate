@@ -17,7 +17,7 @@ import java.util.List;
 public class RenterController {
     private final RenterService renterService;
 
-    @GetMapping("/get-all-renteres")
+    @GetMapping("/get-all-renters")
     public ResponseEntity<List<RenterDtoOut>> getAllRentersForAdmins() {
         return ResponseEntity.status(200).body(renterService.getAllRenters());
     }
