@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/complaint")
+@RequestMapping("/api/v1/sakan-mate/complaint")
 public class ComplaintController {
 
     private final ComplaintService complaintService;
