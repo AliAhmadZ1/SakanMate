@@ -28,11 +28,11 @@ public class Renter {
     @NotEmpty(message = "The password can not be empty.")
     private String password;
     @ManyToOne
-    @JoinColumn(name = "renter_id", referencedColumnName = "id")
+    @JoinColumn(name = "contract_renter_id", referencedColumnName = "id")
     @JsonIgnore
     private Contract contract;
     @ManyToOne
-    @JoinColumn(name = "renter_id", referencedColumnName = "id")
+    @JoinColumn(name = "request_renter_id", referencedColumnName = "id")
     @JsonIgnore
     private Request request;
 
