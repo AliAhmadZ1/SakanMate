@@ -1,5 +1,6 @@
 package com.example.sakanmate.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -27,5 +28,13 @@ public class ApartmentReview {
     private Integer apartmentId;
 
     @ManyToOne
+    @JoinColumn
+    @JsonIgnore
     private Renter renter;
+
+    @ManyToOne
+    @JoinColumn(name = "apartment_review_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Apartment apartment;
+
 }
