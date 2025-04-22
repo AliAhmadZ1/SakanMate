@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>SakanMate</artifactId>
+    <artifactId>SakanMate-Platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SakanMate</name>
-    <description>SakanMate</description>
+    <name>SakanMate-Platform</name>
+    <description>SakanMate-Platform</description>
     <url/>
     <licenses>
         <license/>
@@ -33,6 +33,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
