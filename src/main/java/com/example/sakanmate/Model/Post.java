@@ -6,10 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.pl.NIP;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -28,7 +30,8 @@ public class Post {
     private String status;
 
     private LocalDate postDate;
-
+    @Column(columnDefinition = "int")
+    private Integer numberOfApprovedRequests;
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @JsonIgnore
