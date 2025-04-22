@@ -23,6 +23,12 @@ public class Owner {
 
     private String password;
 
+    private boolean isApproved = false;
+
+    private String rejectionReason;
+
+    private String licenseNumber;
+
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "owner")
     private Set<Apartment> apartment;
 

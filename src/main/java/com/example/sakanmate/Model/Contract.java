@@ -37,8 +37,13 @@ public class Contract {
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime endDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
-    private Set<Renter> renters;
+    private Boolean isRenewed = false;
+    private Boolean adminApproved = false;
+
+    @OneToOne
+    @MapsId
+    @JsonIgnore
+    private Renter renter;
 
     @OneToOne
     @MapsId

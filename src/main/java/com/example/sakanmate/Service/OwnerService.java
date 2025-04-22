@@ -41,5 +41,26 @@ public class OwnerService {
         ownerRepository.delete(owner);
     }
 
+    public void approveOwner(Integer ownerId) {
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner==null){
+            throw new RuntimeException("Owner not found");
+        }
+
+        owner.setApproved(true);
+        ownerRepository.save(owner);
+    }
+
+    public void rejectOwnerByAdmin(Integer id, String reason) {
+        Owner owner = ownerRepository.findOwnerById(id);
+        if (owner==null){
+            throw new RuntimeException("Owner not found");
+        }
+
+        owner.setApproved(false);
+        owner.setRejectionReason(reason);
+        ownerRepository.save(owner);
+    }
+
 
 }

@@ -22,7 +22,6 @@ public class ApartmentReviewService {
         ApartmentReview review = new ApartmentReview();
         review.setRating(dto.getRating());
         review.setDescription(dto.getDescription());
-        review.setApartmentId(dto.getApartmentId());
         repo.save(review);
     }
 
@@ -34,7 +33,6 @@ public class ApartmentReviewService {
 
         review.setRating(dto.getRating());
         review.setDescription(dto.getDescription());
-        review.setApartmentId(dto.getApartmentId());
 
         repo.save(review);
     }

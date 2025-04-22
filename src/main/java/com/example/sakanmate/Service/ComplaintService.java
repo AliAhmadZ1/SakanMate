@@ -22,7 +22,6 @@ public class ComplaintService {
         c.setTitle(dto.getTitle());
         c.setDescription(dto.getDescription());
         c.setApartmentId(dto.getApartmentId());
-        c.setRenterId(dto.getRenterId());
         complaintRepository.save(c);
     }
 
@@ -36,7 +35,6 @@ public class ComplaintService {
         complaint.setTitle(dto.getTitle());
         complaint.setDescription(dto.getDescription());
         complaint.setApartmentId(dto.getApartmentId());
-        complaint.setRenterId(dto.getRenterId());
 
         complaintRepository.save(complaint);
     }

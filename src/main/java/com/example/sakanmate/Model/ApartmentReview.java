@@ -25,7 +25,6 @@ public class ApartmentReview {
 
     private String description;
 
-    private Integer apartmentId;
 
     @ManyToOne
     @JoinColumn

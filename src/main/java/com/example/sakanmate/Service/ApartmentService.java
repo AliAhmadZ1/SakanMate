@@ -33,7 +33,6 @@ public class ApartmentService {
         oldApartment.setMax_renter(apartment.getMax_renter());
         oldApartment.setDocument_number(apartment.getDocument_number());
         oldApartment.setNumber_of_remaining(apartment.getNumber_of_remaining());
-        oldApartment.setOwner_id(apartment.getOwner_id());
         apartmentRepository.save(oldApartment);
     }
 
@@ -43,5 +42,16 @@ public class ApartmentService {
             throw new ApiException("Apartment not found");
 
         apartmentRepository.delete(apartment);
+    }
+
+    public void approveApartment(Integer apartmentId) {
+        Apartment apt = apartmentRepository.findApartmentById(apartmentId);
+        if (apt==null){
+            throw new RuntimeException("Apartment not found");
+        }
+
+
+        apt.setApproved(true);
+        apartmentRepository.save(apt);
     }
 }

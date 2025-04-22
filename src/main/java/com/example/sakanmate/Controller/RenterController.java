@@ -51,7 +51,7 @@ public class RenterController {
         return ResponseEntity.status(200).body(renterService.checkRequestStatus(renterId, requestId));
     }
 
-    @GetMapping("check-request-status/{renterId}/{requestId}")
+    @GetMapping("/cancel-request-status/{renterId}/{requestId}")
     public ResponseEntity<ApiResponse> cancelRequest(@PathVariable Integer renterId, @PathVariable Integer requestId){
         renterService.cancelRequest(renterId, requestId);
         return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));

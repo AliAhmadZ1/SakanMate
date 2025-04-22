@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -28,8 +29,9 @@ public class Post {
     private String status;
 
     private LocalDate postDate;
-
-    private Integer owner_id;
+    private boolean approved=false;
+    private LocalDateTime ApprovedDate;
+    private String rejectionReason;
 
 
     @ManyToOne

@@ -1,6 +1,7 @@
 package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Model.Admin;
+import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Repository.AdminRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,4 +41,5 @@ public class AdminService {
     public void deleteAdmin(Integer id) {
         repo.deleteById(id);
     }
+
 }
