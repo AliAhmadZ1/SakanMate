@@ -27,18 +27,18 @@ public class ApartmentReviewService {
         repo.save(review);
     }
 
-    public void updateReview( ApartmentReviewDTO dto) {
-        ApartmentReview review = repo.findByApartmentId(dto.getRenterId());
-
-
-
-        review.setRating(dto.getRating());
-        review.setDescription(dto.getDescription());
-        review.setApartmentId(dto.getApartmentId());
-        review.setRenterId(dto.getRenterId());
-
-        repo.save(review);
-    }
+//    public void updateReview( ApartmentReviewDTO dto) {
+//        ApartmentReview review = repo.findByApartmentId(dto.getRenterId());
+//
+//
+//
+//        review.setRating(dto.getRating());
+//        review.setDescription(dto.getDescription());
+//        review.setApartmentId(dto.getApartmentId());
+//        review.setRenterId(dto.getRenterId());
+//
+//        repo.save(review);
+//    }
 
     public void deleteReview(Integer id) {
         repo.deleteById(id);
