@@ -27,7 +27,7 @@ public class Apartment {
 
     private Integer number_of_remaining;
 
-    private Integer max_renter;
+    private Integer max_renters;
 
     private Boolean availability;
 

@@ -30,7 +30,7 @@ public class ApartmentService {
         oldApartment.setTitle(apartment.getTitle());
         oldApartment.setDescription(apartment.getDescription());
         oldApartment.setAvailability(apartment.getAvailability());
-        oldApartment.setMax_renter(apartment.getMax_renter());
+        oldApartment.setMax_renters(apartment.getMax_renters());
         oldApartment.setDocument_number(apartment.getDocument_number());
         oldApartment.setNumber_of_remaining(apartment.getNumber_of_remaining());
         apartmentRepository.save(oldApartment);
