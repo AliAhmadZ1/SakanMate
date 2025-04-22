@@ -3,6 +3,7 @@ package com.example.sakanmate.Service;
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Contract;
+import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ContractRepository;
@@ -64,6 +65,12 @@ public class AdminService {
             case "rejected" -> throw new ApiException("Can not create a contract to a rejected request.");
             case "canceled" -> throw new ApiException("Can not create a contract to a canceled request");
         }
+        // Get the post
+        Post post = request.getPost();
+
+        // Check if there is less than 2 requests for the apartment.
+        if(post.getNumberOfApprovedRequests() < 2) throw new ApiException("Apartment must have at least two renters.");
+
         // Calculate the total price.
         double totalPrice = request.getPost().getApartment().getMonthlyPrice() * request.getMonths();
 
