@@ -71,11 +71,13 @@ public class RenterService {
         }
 
         // Make the request (make the request object) and mark the request status as pending.
-        Request request = new Request(null, "pending", renter);
-        renter.getRequests().add(request);
-
-        // Save the objects in the database.
-        requestRepository.save(request);
+        //*******************ERROR***************
+//        Request request = new Request(null, "pending", renter);
+//        renter.getRequests().add(request);
+//
+//        // Save the objects in the database.
+//        requestRepository.save(request);
+        //*******************ERROR***************
         renterRepository.save(renter);
     }
 
