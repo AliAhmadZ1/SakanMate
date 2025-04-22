@@ -6,6 +6,8 @@ import com.example.sakanmate.Model.Contract;
 import com.example.sakanmate.Service.ContractService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +40,15 @@ public class ContractController {
     public ResponseEntity<ApiResponse> deleteContract(@PathVariable Integer contractId) {
         contractService.deleteContract(contractId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract deleted successfully."));
+    }
+
+    @GetMapping("/get-contract-as-pdf/{contractId}")
+    public ResponseEntity<byte[]> getContractAsPdf(@PathVariable Integer contractId) {
+        byte[] pdfBytes = contractService.getContractAsPdf(contractId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=contract-" + contractId + ".pdf") // Forces download
+                .contentType(MediaType.APPLICATION_PDF) // Sets MIME type
+                .body(pdfBytes);
     }
 }
