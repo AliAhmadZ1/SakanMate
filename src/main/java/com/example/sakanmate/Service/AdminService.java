@@ -1,11 +1,9 @@
 package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
-import com.example.sakanmate.Model.Admin;
-import com.example.sakanmate.Model.Contract;
-import com.example.sakanmate.Model.Post;
-import com.example.sakanmate.Model.Request;
+import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.AdminRepository;
+import com.example.sakanmate.Repository.ComplaintRepository;
 import com.example.sakanmate.Repository.ContractRepository;
 import com.example.sakanmate.Repository.RequestRepository;
 import lombok.AllArgsConstructor;
@@ -21,6 +19,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final RequestRepository requestRepository;
     private final ContractRepository contractRepository;
+    private final ComplaintRepository complaintRepository;
 
     public Admin getAllAdmin(Integer id) {
         return adminRepository.findAdminsById(id);
@@ -78,5 +77,20 @@ public class AdminService {
 
         // Save the contact in the database.
         contractRepository.save(contract);
+    }
+
+    public void assignComplaintToAdmin(Integer adminId, Integer complaintId) {
+        // Get the admin and check if it's in the database.
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null)
+            throw new ApiException("Admin not found."); // Get the admin and check if it's in the database.
+        Complaint complaint = complaintRepository.findComplaintById(complaintId);
+        if (complaint == null) throw new ApiException("Compliant not found.");
+
+        // Assign the complaint to the admin
+        complaint.setAdmin(admin);
+
+        // Save the complaint
+        complaintRepository.save(complaint);
     }
 }
