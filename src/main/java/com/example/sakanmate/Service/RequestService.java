@@ -13,6 +13,11 @@ import java.util.List;
 public class RequestService {
     private final RequestRepository requestRepository;
 
+
+    public void update(){
+
+    }
+
     public List<Request> getAll(){
         return requestRepository.findAll();
     }
