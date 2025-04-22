@@ -2,7 +2,9 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.Owner;
+import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.OwnerRepository;
+import com.example.sakanmate.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class OwnerService {
 
     private final OwnerRepository ownerRepository;
+    private final RequestRepository requestRepository;
 
     public List<Owner> getAllOwners(){
         return ownerRepository.findAll();
@@ -39,6 +42,20 @@ public class OwnerService {
             throw new ApiException("Owner not found");
 
         ownerRepository.delete(owner);
+    }
+
+    public void approveRequest(Integer ownerId, Integer requestId){
+
+    }
+
+    public void validateOwnerAndRequest(Integer ownerId, Integer requestId){
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner==null)
+            throw new ApiException("Owner not found");
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null)
+            throw new ApiException("Request not found");
+        if(request.get)
     }
 
 

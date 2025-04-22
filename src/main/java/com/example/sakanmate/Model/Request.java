@@ -23,6 +23,9 @@ public class Request {
     private String state;
     @ManyToOne
     @JoinColumn(name = "request_renter_id", referencedColumnName = "id")
-    @JsonIgnore
+    // The json ignore moved to the renter, since when fetching the request we need to know the renter,
+    // but when fetching the renter we do not need to see his/her requests.
     private Renter renter;
+    @ManyToOne
+    private Post post;
 }
