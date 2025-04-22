@@ -16,6 +16,7 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
     private final RequestRepository requestRepository;
+
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
     }
@@ -63,8 +64,15 @@ public class OwnerService {
             case "canceled" -> throw new ApiException("The request has been canceled.");
         }
 
+        // Check if the apartment is full
+        if (request.getPost().getApartment().getNumber_of_remaining() < 1)
+            throw new ApiException("The apartment is full.");
+
         // Accept the request.
         request.setState("accepted");
+
+        // Decrease the number of remaining.
+        request.getPost().getApartment().setNumber_of_remaining(request.getPost().getApartment().getNumber_of_remaining()-1);
 
         // Save the request.
         requestRepository.save(request);
