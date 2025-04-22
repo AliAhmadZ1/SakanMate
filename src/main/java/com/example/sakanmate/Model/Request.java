@@ -1,6 +1,8 @@
 package com.example.sakanmate.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +19,10 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private boolean state;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "request")
-    private Set<Renter> renters;
-    //private Apartment apartment;
+    @Pattern(regexp = "accepted|rejected|pending|canceled")
+    private String state;
+    @ManyToOne
+    @JoinColumn(name = "request_renter_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Renter renter;
 }

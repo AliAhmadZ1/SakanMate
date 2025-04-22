@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -31,9 +33,7 @@ public class Renter {
     @JoinColumn(name = "contract_renter_id", referencedColumnName = "id")
     @JsonIgnore
     private Contract contract;
-    @ManyToOne
-    @JoinColumn(name = "request_renter_id", referencedColumnName = "id")
-    @JsonIgnore
-    private Request request;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "request")
+    private Set<Request> requests;
 
 }

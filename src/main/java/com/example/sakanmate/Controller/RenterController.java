@@ -39,4 +39,23 @@ public class RenterController {
         renterService.deleteRenter(renterId);
         return ResponseEntity.status(200).body(new ApiResponse("Renter deleted successfully."));
     }
+
+    @PostMapping("request-apartment/{renterId}/{postId}")
+    public ResponseEntity<ApiResponse> requestApartment(@PathVariable Integer renterId, @PathVariable Integer postId){
+        renterService.requestApartment(renterId, postId);
+        return ResponseEntity.status(200).body(new ApiResponse("Request made successfully."));
+    }
+
+    @GetMapping("check-request-status/{renterId}/{requestId}")
+    public ResponseEntity<String> checkRequestStatus(@PathVariable Integer renterId, @PathVariable Integer requestId){
+        return ResponseEntity.status(200).body(renterService.checkRequestStatus(renterId, requestId));
+    }
+
+    @GetMapping("check-request-status/{renterId}/{requestId}")
+    public ResponseEntity<ApiResponse> cancelRequest(@PathVariable Integer renterId, @PathVariable Integer requestId){
+        renterService.cancelRequest(renterId, requestId);
+        return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));
+
+    }
+
 }
