@@ -2,8 +2,10 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.Owner;
+import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.OwnerRepository;
+import com.example.sakanmate.Repository.PostRepository;
 import com.example.sakanmate.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
     private final RequestRepository requestRepository;
+    private final PostRepository postRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -64,15 +67,22 @@ public class OwnerService {
             case "canceled" -> throw new ApiException("The request has been canceled.");
         }
 
+        //Get the post
+        Post post = request.getPost();
+
         // Check if the apartment is full
-        if (request.getPost().getApartment().getNumber_of_remaining() < 1)
+        if (post.getApartment().getNumber_of_remaining() < 1)
             throw new ApiException("The apartment is full.");
 
         // Accept the request.
         request.setState("accepted");
 
+
         // Decrease the number of remaining.
-        request.getPost().getApartment().setNumber_of_remaining(request.getPost().getApartment().getNumber_of_remaining()-1);
+        post.getApartment().setNumber_of_remaining(request.getPost().getApartment().getNumber_of_remaining()-1);
+
+        // Increase the number of approved requests
+        post.setNumberOfApprovedRequests(post.getNumberOfApprovedRequests()+1);
 
         // Save the request.
         requestRepository.save(request);
