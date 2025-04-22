@@ -126,7 +126,7 @@ public class RenterService {
         contract.getRenters().add(renter);
     }
 
-    public void FileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
+    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");

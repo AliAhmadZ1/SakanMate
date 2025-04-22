@@ -62,7 +62,12 @@ public class RenterController {
     public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId){
         renterService.acceptContract(renterId, contractId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract accepted successfully."));
+    }
 
+    @PostMapping("/file-complaint/{renterId}/{apartmentId}")
+    public ResponseEntity<ApiResponse> fileComplaint(@PathVariable Integer renterId, @PathVariable Integer apartmentId, @RequestBody String title, @RequestBody String description){
+        renterService.fileAComplaint(renterId, apartmentId, title, description);
+        return ResponseEntity.status(200).body(new ApiResponse("Complaint filed successfully."));
     }
 
 }
