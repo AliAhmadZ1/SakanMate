@@ -3,6 +3,7 @@ package com.example.sakanmate.Service;
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ContractDtoOut;
 import com.example.sakanmate.Model.Contract;
+import com.example.sakanmate.Model.Renter;
 import com.example.sakanmate.Repository.ContractRepository;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
@@ -55,6 +56,7 @@ public class ContractService {
     public byte[] getContractAsPdf(Integer contractId){
         Contract contract = contractRepository.findContractById(contractId);
         if(contract == null) throw new ApiException("Contract not found.");
+        //***Check contract status.
         return createPlainTextPdf(contract);
 
     }
@@ -73,15 +75,22 @@ public class ContractService {
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(Chunk.NEWLINE); // Blank line
+            // Format the renters
+            StringBuilder renters = new StringBuilder("");
+            for(Renter renter : contract.getRenters()){
+                renters.append("Name: " + renter.getName() + "\nEmail: " + renter.getEmail() + "\n---------\n");
+            }
+            // Format the pdf
+            document.add(new Paragraph("---------------------------------------------------------------------"));
+            document.add(new Paragraph("Contract ID: " + contract.getId()));
+            document.add(new Paragraph("Apartment Title: " + contract.getApartment().getTitle()));
+            document.add(new Paragraph("Owner Name: " + contract.getOwner().getName()));
+            document.add(new Paragraph("Contract Total Price: " + contract.getTotalPrice()));
+            document.add(new Paragraph("Contract Start Date: " + contract.getStartDate()));
+            document.add(new Paragraph("Contract End Date: " + contract.getEndDate()));
+            document.add(new Paragraph("Renters:\n" + renters));
+            document.add(new Paragraph("---------------------------------------------------------------------"));
 
-            // User Data (Left-Aligned, No Styling)
-            document.add(new Paragraph("ID: " + contract.getId()));
-//            document.add(new Paragraph("Apartment: " + contract.getApartment()));
-//            document.add(new Paragraph("Owner: " + contract.getOwner()));
-            document.add(new Paragraph("Price: " + contract.getTotalPrice()));
-            document.add(new Paragraph("Start date: " + contract.getStartDate()));
-            document.add(new Paragraph("End date: " + contract.getEndDate()));
-//            document.add(new Paragraph("Renters: " + contract.getRenters()));
 
             document.close();
             return baos.toByteArray();
