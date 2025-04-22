@@ -2,9 +2,11 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.RenterDtoOut;
+import com.example.sakanmate.Model.Contract;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Model.Renter;
 import com.example.sakanmate.Model.Request;
+import com.example.sakanmate.Repository.ContractRepository;
 import com.example.sakanmate.Repository.PostRepository;
 import com.example.sakanmate.Repository.RenterRepository;
 import com.example.sakanmate.Repository.RequestRepository;
@@ -21,6 +23,7 @@ public class RenterService {
     private final RenterRepository renterRepository;
     private final PostRepository postRepository;
     private final RequestRepository requestRepository;
+    private final ContractRepository contractRepository;
 
     public List<RenterDtoOut> getAllRenters() {
         List<Renter> renters = renterRepository.findAll();
@@ -111,5 +114,20 @@ public class RenterService {
         // Change the state and save the request.
         request.setState("canceled");
         requestRepository.save(request);
+    }
+
+    public void acceptContract(Integer renterId, Integer contractId){
+        // Check if the renter exists in the database.
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter == null) throw new ApiException("Renter not found.");
+
+        // Check if the contract exists in the database.
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract == null) throw new ApiException("Contract not found.");
+
+        // Check if the contract belong to the renter ************8
+
+        // Add the renter to the contract renters * renter accepting the contract.
+        contract.getRenters().add(renter);
     }
 }

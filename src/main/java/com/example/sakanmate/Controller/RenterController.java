@@ -40,21 +40,28 @@ public class RenterController {
         return ResponseEntity.status(200).body(new ApiResponse("Renter deleted successfully."));
     }
 
-    @PostMapping("request-apartment/{renterId}/{postId}")
+    @PostMapping(".request-apartment/{renterId}/{postId}")
     public ResponseEntity<ApiResponse> requestApartment(@PathVariable Integer renterId, @PathVariable Integer postId, @RequestBody int months){
         renterService.requestApartment(renterId, postId, months);
         return ResponseEntity.status(200).body(new ApiResponse("Request made successfully."));
     }
 
-    @GetMapping("check-request-status/{renterId}/{requestId}")
+    @GetMapping("/check-request-status/{renterId}/{requestId}")
     public ResponseEntity<String> checkRequestStatus(@PathVariable Integer renterId, @PathVariable Integer requestId){
         return ResponseEntity.status(200).body(renterService.checkRequestStatus(renterId, requestId));
     }
 
-    @GetMapping("cancel-request/{renterId}/{requestId}")
+    @GetMapping("/cancel-request/{renterId}/{requestId}")
     public ResponseEntity<ApiResponse> cancelRequest(@PathVariable Integer renterId, @PathVariable Integer requestId){
         renterService.cancelRequest(renterId, requestId);
         return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));
+
+    }
+
+    @PutMapping("/accept-contract/{renterId}/{contractId}")
+    public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId){
+        renterService.acceptContract(renterId, contractId);
+        return ResponseEntity.status(200).body(new ApiResponse("Contract accepted successfully."));
 
     }
 
