@@ -16,5 +16,9 @@ public class RequestService {
     public List<Request> getAll(){
         return requestRepository.findAll();
     }
+
+    public void update(){
+
+    }
 }
 
