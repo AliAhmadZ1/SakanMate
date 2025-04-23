@@ -37,4 +37,12 @@ public class ApartmentReviewController {
         apartmentReviewService.deleteReview(id);
         return ResponseEntity.ok("Review deleted successfully.");
     }
+    @DeleteMapping("/reviews/{id}/{adminId}")
+    public ResponseEntity<String> deleteReviewByAdmin(
+            @PathVariable Integer id,
+            @PathVariable Integer adminId) {
+
+        apartmentReviewService.deleteReviewById(id, adminId);
+        return ResponseEntity.ok("Review deleted by admin ID: " + adminId);
+    }
 }
