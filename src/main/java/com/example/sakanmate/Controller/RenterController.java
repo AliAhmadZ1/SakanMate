@@ -2,6 +2,7 @@ package com.example.sakanmate.Controller;
 
 import com.example.sakanmate.Api.ApiResponse;
 import com.example.sakanmate.DtoOut.RenterDtoOut;
+import com.example.sakanmate.Model.ApartmentReview;
 import com.example.sakanmate.Model.Renter;
 import com.example.sakanmate.Service.RenterService;
 import jakarta.validation.Valid;
@@ -39,4 +40,12 @@ public class RenterController {
         renterService.deleteRenter(renterId);
         return ResponseEntity.status(200).body(new ApiResponse("Renter deleted successfully."));
     }
+
+    //Ali ALshehri
+    @PostMapping("/make-review/{id}/apartment/{apartment_id}")
+    public ResponseEntity makeReview(@PathVariable Integer id, @PathVariable Integer apartment_id, @RequestBody@Valid ApartmentReview apartmentReview){
+        renterService.makeReview(id, apartment_id, apartmentReview);
+        return ResponseEntity.status(200).body(new ApiResponse("apartment review sent"));
+    }
+
 }
