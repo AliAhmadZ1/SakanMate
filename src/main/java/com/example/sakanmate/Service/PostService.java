@@ -142,7 +142,7 @@ public class PostService {
             throw new ApiException("owner not found");
         if (apartment == null)
             throw new ApiException("apartment not found");
-        Post post = new Post(null, "pending", LocalDate.now(), 0, false, null, null, null, apartment, owner, null);
+        Post post = new Post(null, "pending", LocalDateTime.now(), 0, false, null, null, null, apartment, owner, null);
         postRepository.save(post);
 
         ownerRepository.save(owner);

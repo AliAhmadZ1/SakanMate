@@ -10,9 +10,14 @@ import com.example.sakanmate.Repository.PostRepository;
 import com.example.sakanmate.Repository.RenterRepository;
 import com.example.sakanmate.Repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +27,9 @@ public class RequestService {
     private final RenterRepository renterRepository;
     private final PostRepository postRepository;
     private final OwnerRepository ownerRepository;
+    private final JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
     // Ayman
     // This is where the request get asked by the user given the post id and the renter id
@@ -41,6 +49,7 @@ public class RequestService {
             case "rented" -> throw new ApiException("This apartment has been rented.");
         }
 
+
         // Check the months
         if (months < 1) throw new ApiException("The months need to greater than 1.");
 
@@ -55,6 +64,14 @@ public class RequestService {
         post.getRequest().add(request);
         renter.getRequests().add(request);
         renterRepository.save(renter);
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(senderEmail);
+        simpleMailMessage.setTo(renter.getEmail());
+        simpleMailMessage.setText("You have a new request from "+renter.getName());
+        simpleMailMessage.setSubject("New Request");
+        simpleMailMessage.setSentDate(Date.from(Instant.now()));
+        javaMailSender.send(simpleMailMessage);
     }
 
     // Ayman
