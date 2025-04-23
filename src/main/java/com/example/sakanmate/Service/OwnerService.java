@@ -77,19 +77,7 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
-    //ali
-    // add apartment by owner
-    public void addApartment(Integer id, Apartment apartment){
-        Owner owner = ownerRepository.findOwnerById(id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        apartment.setOwner(owner);
-        apartment.setNumber_of_remaining(apartment.getMax_renters());
-        apartmentRepository.save(apartment);
-        //owner.getApartments().add(apartment);
-        ownerRepository.save(owner);
 
-    }
 
     //ali
     public void createPost(Integer id, Integer apartment_id){

@@ -20,12 +20,6 @@ public class ApartmentController {
         return ResponseEntity.status(200).body(apartmentService.getAll());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addApartment(@RequestBody @Valid Apartment apartment){
-        apartmentService.addApartment(apartment);
-        return ResponseEntity.status(200).body(new ApiResponse("apartment added"));
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity updateApartment(@PathVariable Integer id, @RequestBody@Valid Apartment apartment){
         apartmentService.updateApartment(id, apartment);
@@ -42,5 +36,13 @@ public class ApartmentController {
     public ResponseEntity<String> approveApartment(@PathVariable Integer id,@PathVariable Integer adminId) {
         apartmentService.approveApartment(id,adminId);
         return ResponseEntity.ok("Apartment approved.");
+    }
+
+    //ali
+    @PostMapping("/add-apartment/{id}")
+    public ResponseEntity addApartmentToSakanMate(@PathVariable Integer id, @RequestBody Apartment apartment){
+        apartmentService.addApartmentToSakanMate(id, apartment);
+        return ResponseEntity.status(200).body(new ApiResponse("new Apartment added"));
+
     }
 }
