@@ -32,18 +32,6 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public void addPost(PostDTO postDTO){
-        Apartment apartment = apartmentRepository.findApartmentById(postDTO.getApartment_id());
-        if (apartment==null)
-            throw new ApiException("apartment not found");
-        Owner owner = ownerRepository.findOwnerById(apartment.getOwner().getId());
-        if (owner==null)
-            throw new ApiException("owner don't found");
-        postDTO.setPostDate(LocalDate.now());
-        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,false,LocalDateTime.now(),"",null,apartment,owner,null);
-        postRepository.save(post);
-    }
-
     public void updatePost(Integer id, PostDTO postDTO){
         Post oldPost = postRepository.findPostById(id);
         if (oldPost==null)
@@ -117,5 +105,21 @@ public class PostService {
         post.setAdmin(admin);
 
         postRepository.save(post);
+    }
+
+    //ali
+    public void createPost(Integer id, Integer apartment_id){
+        Owner owner = ownerRepository.findOwnerById(id);
+        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
+        if (owner==null)
+            throw new ApiException("owner not found");
+        if (apartment==null)
+            throw new ApiException("apartment not found");
+        Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
+        postRepository.save(post);
+        //owner.getPosts().add(post);
+        apartment.getPosts().add(post);
+        ownerRepository.save(owner);
+        apartmentRepository.save(apartment);
     }
 }

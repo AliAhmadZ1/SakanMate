@@ -76,24 +76,4 @@ public class OwnerService {
         owner.setRejectionReason(reason);
         ownerRepository.save(owner);
     }
-
-
-
-    //ali
-    public void createPost(Integer id, Integer apartment_id){
-        Owner owner = ownerRepository.findOwnerById(id);
-        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        if (apartment==null)
-            throw new ApiException("apartment not found");
-        Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
-        postRepository.save(post);
-        //owner.getPosts().add(post);
-        apartment.getPosts().add(post);
-        ownerRepository.save(owner);
-        apartmentRepository.save(apartment);
-    }
-
-
 }
