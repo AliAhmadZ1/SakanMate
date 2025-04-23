@@ -296,7 +296,7 @@ public class ContractService {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(senderEmail);
         simpleMailMessage.setTo(renter.getEmail());
-        simpleMailMessage.setText("The contract is about to expire. \n please renew contract if you want to be continue as a renter");
+        simpleMailMessage.setText("The contract is about to expire. \nPlease renew the contract if you want to continue as a renter.");
         simpleMailMessage.setSubject("Contract Expire attention");
         simpleMailMessage.setSentDate(Date.from(Instant.now()));
         javaMailSender.send(simpleMailMessage);
