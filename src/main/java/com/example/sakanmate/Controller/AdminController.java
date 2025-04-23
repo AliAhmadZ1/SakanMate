@@ -21,7 +21,7 @@ public class AdminController {
         return ResponseEntity.ok("Admin registered.");
     }
 
-    @GetMapping("/profile/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity getAllAdmin(@PathVariable Integer id) {
         return ResponseEntity.ok(adminService.getAllAdmin(id));
     }
@@ -36,18 +36,5 @@ public class AdminController {
     public ResponseEntity deleteAdmin(@PathVariable Integer id) {
         adminService.deleteAdmin(id);
         return ResponseEntity.ok("Admin deleted.");
-    }
-
-    @PostMapping("/create-contract/{adminId}/{requestId}")
-    public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
-        adminService.createContract(adminId, requestId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
-    }
-
-    @PutMapping("/assign-complaint-to-admin/{adminId}/{complaintId}")
-    public ResponseEntity<ApiResponse> assignComplaintToAdmin(@PathVariable Integer adminId, @PathVariable Integer complaintId){
-        adminService.assignComplaintToAdmin(adminId, complaintId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Complaint assigned successfully/"));
-
     }
 }
