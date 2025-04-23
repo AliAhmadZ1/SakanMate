@@ -21,7 +21,7 @@ public class AdminController {
         return ResponseEntity.ok("Admin registered.");
     }
 
-    @GetMapping("/profile/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity getAllAdmin(@PathVariable Integer id) {
         return ResponseEntity.ok(adminService.getAllAdmin(id));
     }

@@ -1,11 +1,14 @@
 package com.example.sakanmate.Controller;
 
 import com.example.sakanmate.Api.ApiResponse;
+import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.RequestRepository;
 import com.example.sakanmate.Service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,10 +26,27 @@ public class RequestController {
         return ResponseEntity.status(200).body(requestService.checkRequestStatus(renterId, requestId));
     }
 
-    @GetMapping("/cancel-request/{renterId}/{requestId}")
+    @PutMapping("/cancel-request/{renterId}/{requestId}")
     public ResponseEntity<ApiResponse> cancelRequest(@PathVariable Integer renterId, @PathVariable Integer requestId){
         requestService.cancelRequest(renterId, requestId);
         return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));
 
+    }
+
+    @PutMapping("/accept-request/{ownerId}/{requestId}")
+    public ResponseEntity<ApiResponse> acceptRequest(@PathVariable Integer ownerId, @PathVariable Integer requestId) {
+        requestService.acceptRequest(ownerId, requestId);
+        return ResponseEntity.status(200).body(new ApiResponse("Request Accepted."));
+    }
+
+    @PutMapping("/reject-request/{ownerId}/{requestId}")
+    public ResponseEntity<ApiResponse> rejectRequest(@PathVariable Integer ownerId, @PathVariable Integer requestId) {
+        requestService.rejectRequest(ownerId, requestId);
+        return ResponseEntity.status(200).body(new ApiResponse("Request Rejected."));
+    }
+
+    @GetMapping("/get-owner-pending-requests/{ownerId}")
+    public ResponseEntity<List<Request>> getOwnerPendingRequests(@PathVariable Integer ownerId){
+        return ResponseEntity.status(200).body(requestService.getOwnerPendingRequests(ownerId));
     }
 }

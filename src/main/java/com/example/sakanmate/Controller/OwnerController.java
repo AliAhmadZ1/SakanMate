@@ -40,22 +40,4 @@ public class OwnerController {
         ownerService.deleteOwner(id);
         return ResponseEntity.status(200).body(new ApiResponse("owner deleted"));
     }
-
-    @PutMapping("/accept-request/{ownerId}/{requestId}")
-    public ResponseEntity<ApiResponse> acceptRequest(@PathVariable Integer ownerId, @PathVariable Integer requestId) {
-        ownerService.acceptRequest(ownerId, requestId);
-        return ResponseEntity.status(200).body(new ApiResponse("Request Accepted."));
-    }
-
-    @PutMapping("/reject-request/{ownerId}/{requestId}")
-    public ResponseEntity<ApiResponse> rejectRequest(@PathVariable Integer ownerId, @PathVariable Integer requestId) {
-        ownerService.rejectRequest(ownerId, requestId);
-        return ResponseEntity.status(200).body(new ApiResponse("Request Rejected."));
-    }
-
-    @GetMapping("/get-owner-pending-requests/{ownerId}")
-    public ResponseEntity<List<Request>> getOwnerPendingRequests(@PathVariable Integer ownerId){
-        return ResponseEntity.status(200).body(ownerService.getOwnerPendingRequests(ownerId));
-    }
-
 }
