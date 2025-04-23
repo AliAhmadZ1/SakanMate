@@ -1,8 +1,11 @@
 package com.example.sakanmate.Controller;
 
+import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Api.ApiResponse;
 import com.example.sakanmate.DtoOut.ContractDtoOut;
+import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Contract;
+import com.example.sakanmate.Model.Renter;
 import com.example.sakanmate.Service.ContractService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -99,6 +106,15 @@ public class ContractController {
 
         contractService.ownerApproveContract(id, ownerId);
         return ResponseEntity.ok("Contract approved by owner.");
+    }
+
+
+    // Endpoint 30
+    //ali
+    @GetMapping("/send-contract-ending-notification/{contract_id}/admin/{admin_id}/renter/{renter_id}")
+    public ResponseEntity contractEndingNotification(@PathVariable Integer contract_id,@PathVariable Integer admin_id,@PathVariable Integer renter_id){
+        contractService.contractEndingNotification(contract_id, admin_id, renter_id);
+        return ResponseEntity.status(200).body(new ApiResponse("notification sent"));
     }
 
 }

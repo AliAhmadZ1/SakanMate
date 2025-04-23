@@ -277,4 +277,29 @@ public class ContractService {
         }
     }
 
+
+    public void contractEndingNotification(Integer contract_id,Integer admin_id, Integer renter_id){
+        Contract contract = contractRepository.findContractById(contract_id);
+        Admin admin = adminRepository.findAdminsById(admin_id);
+        Renter renter = renterRepository.findRenterById(renter_id);
+        if (contract==null)
+            throw new ApiException("Contract not found");
+        if (admin==null)
+            throw new ApiException("Admin not found");
+        if (renter==null)
+            throw new ApiException("renter not found");
+        if (renter.getContract().getId()!=contract_id)
+            throw new ApiException("renter not related to the contract");
+
+        if (LocalDateTime.now().plusDays(11).isBefore(contract.getEndDate()))
+            throw new ApiException("send notification not now should be before 10 days from end date");
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(senderEmail);
+        simpleMailMessage.setTo(renter.getEmail());
+        simpleMailMessage.setText("The contract is about to expire. \n please renew contract if you want to be continue as a renter");
+        simpleMailMessage.setSubject("Contract Expire attention");
+        simpleMailMessage.setSentDate(Date.from(Instant.now()));
+        javaMailSender.send(simpleMailMessage);
+    }
+
 }
