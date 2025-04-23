@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ApartmentReviewService {
@@ -30,9 +31,9 @@ public class ApartmentReviewService {
         repo.save(review);
     }
 
-    public void updateReview( ApartmentReviewDTO dto) {
+    public void updateReview(ApartmentReviewDTO dto) {
         ApartmentReview review = repo.findApartmentReviewById(dto.getRenterId());
-        if (review==null){
+        if (review == null) {
             throw new ArithmeticException();
         }
 
@@ -47,17 +48,26 @@ public class ApartmentReviewService {
     }
 
     //ali
-    public void voteReview(Integer renter_id, Integer review_id, boolean vote){
+    public void upVoteReview(Integer renter_id, Integer review_id) {
         Renter renter = renterRepository.findRenterById(renter_id);
         ApartmentReview apartmentReview = apartmentReviewRepository.findApartmentReviewById(review_id);
-        if (renter==null)
+        if (renter == null)
             throw new ApiException("renter not found");
-        if (apartmentReview==null)
+        if (apartmentReview == null)
             throw new ApiException("apartment review not found");
-        if (vote)
-            apartmentReview.setUp_vote(apartmentReview.getUp_vote()+1);
-        else
-            apartmentReview.setDown_vote(apartmentReview.getDown_vote()+1);
+        apartmentReview.setUp_vote(apartmentReview.getUp_vote() + 1);
+        apartmentReviewRepository.save(apartmentReview);
+    }
 
+    //ali
+    public void downVoteReview(Integer renter_id, Integer review_id) {
+        Renter renter = renterRepository.findRenterById(renter_id);
+        ApartmentReview apartmentReview = apartmentReviewRepository.findApartmentReviewById(review_id);
+        if (renter == null)
+            throw new ApiException("renter not found");
+        if (apartmentReview == null)
+            throw new ApiException("apartment review not found");
+        apartmentReview.setDown_vote(apartmentReview.getDown_vote() + 1);
+        apartmentReviewRepository.save(apartmentReview);
     }
 }

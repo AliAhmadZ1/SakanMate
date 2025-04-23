@@ -1,5 +1,6 @@
 package com.example.sakanmate.Controller;
 
+import com.example.sakanmate.Api.ApiResponse;
 import com.example.sakanmate.DtoOut.ApartmentReviewDTO;
 import com.example.sakanmate.Service.ApartmentReviewService;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,17 @@ public class ApartmentReviewController {
     public ResponseEntity deleteReview(@PathVariable Integer id) {
         apartmentReviewService.deleteReview(id);
         return ResponseEntity.ok("Review deleted successfully.");
+    }
+
+    @PutMapping("/up-vote/{renter_id}/review/{review_id}")
+    public ResponseEntity upVoteReview(@PathVariable Integer renter_id, @PathVariable Integer review_id){
+        apartmentReviewService.upVoteReview(renter_id, review_id);
+        return ResponseEntity.status(200).body(new ApiResponse("up vote review"));
+    }
+
+    @PutMapping("/down-vote/{renter_id}/review/{review_id}")
+    public ResponseEntity downVoteReview(@PathVariable Integer renter_id, @PathVariable Integer review_id){
+        apartmentReviewService.downVoteReview(renter_id, review_id);
+        return ResponseEntity.status(200).body(new ApiResponse("down vote review"));
     }
 }
