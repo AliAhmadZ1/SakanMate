@@ -2,6 +2,7 @@ package com.example.sakanmate.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,11 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "The title can not be empty.")
+    @Column(columnDefinition = "varchar(20) not null")
     private String title;
+    @NotEmpty(message = "The description can not be empty.")
+    @Column(columnDefinition = "varchar(200) not null")
     private String description;
 
     @ManyToOne

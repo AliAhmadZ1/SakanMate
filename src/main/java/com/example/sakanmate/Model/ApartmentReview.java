@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +27,11 @@ public class ApartmentReview {
 
     @Min(1)
     @Max(5)
+    @NotNull(message = "The ratting can not be null")
+    @Column(columnDefinition = "int not null")
     private Integer rating;
 
+    @Column(columnDefinition = "varchar(200)")
     private String comment;
     @Column(columnDefinition = "int not null")
     private int up_vote;

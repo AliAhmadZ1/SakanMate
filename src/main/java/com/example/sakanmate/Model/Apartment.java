@@ -44,6 +44,7 @@ public class Apartment {
 
     private boolean isApproved = false;
 
+    @Column(columnDefinition = "varchar(200)")
     private String rejectionReason;
 
 
