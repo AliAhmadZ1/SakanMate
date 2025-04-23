@@ -6,9 +6,11 @@ import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ApartmentRepository;
+import com.example.sakanmate.Repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 @Service
@@ -17,13 +19,10 @@ public class ApartmentService {
 
     private final ApartmentRepository apartmentRepository;
     private final AdminRepository adminRepository;
+    private final OwnerRepository ownerRepository;
 
     public List<Apartment> getAll(){
         return apartmentRepository.findAll();
-    }
-
-    public void addApartment(Apartment apartment){
-        apartmentRepository.save(apartment);
     }
 
     public void updateApartment(Integer id,Apartment apartment){
@@ -76,5 +75,22 @@ if (reason==null){
         apartment.setApproved(false);
         apartment.setRejectionReason(reason);
         apartmentRepository.save(apartment);
+    }
+
+    //ali
+    // add apartment by owner
+    public void addApartmentToSakanMate(Integer id, Apartment apartment){
+        Owner owner = ownerRepository.findOwnerById(id);
+        if (owner==null)
+            throw new ApiException("owner not found");
+        apartment.setOwner(owner);
+        apartment.setNumber_of_remaining(apartment.getMax_renters());
+        apartmentRepository.save(apartment);
+        try {
+            owner.getApartments().add(apartment); // may trigger ConcurrentModificationException
+        } catch (ConcurrentModificationException e) {
+        }
+        ownerRepository.save(owner);
+
     }
 }

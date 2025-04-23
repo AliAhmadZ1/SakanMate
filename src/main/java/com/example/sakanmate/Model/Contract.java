@@ -44,7 +44,7 @@ public class Contract {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
     private Set<Renter> renters;
 
-    @OneToOne
+    @ManyToOne
     @JsonIgnore
     private Apartment apartment;
 

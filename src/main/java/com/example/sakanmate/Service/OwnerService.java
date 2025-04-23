@@ -4,11 +4,15 @@ import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DTO_In.PostDTO;
 import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +43,17 @@ public class OwnerService {
         ownerRepository.save(oldOwner);
     }
 
+    @Transactional
     public void deleteOwner(Integer id) {
+        // Check owner
         Owner owner = ownerRepository.findOwnerById(id);
-        if (owner == null)
-            throw new ApiException("Owner not found");
+        if(owner == null) throw new ApiException("Owner not found.");
 
-        ownerRepository.delete(owner);
+        // Break all relationships using bulk update
+        apartmentRepository.detachAllApartmentsFromOwner(id);
+
+        // Delete the owner
+        ownerRepository.deleteById(id);
     }
 
 
@@ -78,34 +87,4 @@ public class OwnerService {
         owner.setRejectionReason(reason);
         ownerRepository.save(owner);
     }
-
-    //ali
-    // add apartment by owner
-    public void addApartment(Integer id, Apartment apartment){
-        Owner owner = ownerRepository.findOwnerById(id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        apartment.setOwner(owner);
-        owner.getApartment().add(apartment);
-        ownerRepository.save(owner);
-        apartmentRepository.save(apartment);
-    }
-
-    //ali
-    public void createPost(Integer id, Integer apartment_id){
-        Owner owner = ownerRepository.findOwnerById(id);
-        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        if (apartment==null)
-            throw new ApiException("apartment not found");
-        Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
-        owner.getPosts().add(post);
-        apartment.setPost(post);
-        postRepository.save(post);
-        ownerRepository.save(owner);
-        apartmentRepository.save(apartment);
-    }
-
-
 }
