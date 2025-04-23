@@ -39,11 +39,12 @@ public class Post {
 
 
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JoinColumn(name = "admin_id", referencedColumnName = "id")
     @JsonIgnore
     private Admin admin;
 
     @ManyToOne
+    @JoinColumn(name = "apartment_id")
     @JsonIgnore
     private Apartment apartment;
 

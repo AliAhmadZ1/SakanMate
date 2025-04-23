@@ -39,7 +39,7 @@ public class ApartmentController {
     }
 
     //ali
-    @PostMapping("/add-apartment/{id}")
+    @PostMapping("/add-apartment-to-sakanmate/{id}")
     public ResponseEntity addApartmentToSakanMate(@PathVariable Integer id, @RequestBody Apartment apartment){
         apartmentService.addApartmentToSakanMate(id, apartment);
         return ResponseEntity.status(200).body(new ApiResponse("new Apartment added"));

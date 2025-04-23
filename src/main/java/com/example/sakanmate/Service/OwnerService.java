@@ -4,11 +4,15 @@ import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DTO_In.PostDTO;
 import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +43,17 @@ public class OwnerService {
         ownerRepository.save(oldOwner);
     }
 
+    @Transactional
     public void deleteOwner(Integer id) {
+        // Check owner
         Owner owner = ownerRepository.findOwnerById(id);
-        if (owner == null)
-            throw new ApiException("Owner not found");
+        if(owner == null) throw new ApiException("Owner not found.");
 
-        ownerRepository.delete(owner);
+        // Break all relationships using bulk update
+        apartmentRepository.detachAllApartmentsFromOwner(id);
+
+        // Delete the owner
+        ownerRepository.deleteById(id);
     }
 
 

@@ -23,8 +23,8 @@ public class RequestController {
     }
 
     @GetMapping("/check-request-status/{renterId}/{requestId}")
-    public ResponseEntity<String> checkRequestStatus(@PathVariable Integer renterId, @PathVariable Integer requestId){
-        return ResponseEntity.status(200).body(requestService.checkRequestStatus(renterId, requestId));
+    public ResponseEntity<ApiResponse> checkRequestStatus(@PathVariable Integer renterId, @PathVariable Integer requestId){
+        return ResponseEntity.status(200).body(new ApiResponse(requestService.checkRequestStatus(renterId, requestId)));
     }
 
     @PutMapping("/cancel-request/{renterId}/{requestId}")

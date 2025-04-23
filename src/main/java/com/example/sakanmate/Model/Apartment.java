@@ -40,7 +40,8 @@ public class Apartment {
     private boolean isApproved = false;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment")
+    @JsonIgnore
     private Set<Post> posts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
@@ -50,7 +51,7 @@ public class Apartment {
     private Set<Contract> contracts;
 
     @ManyToOne
-    @JoinColumn(name = "apartment_id" , referencedColumnName = "id")
+    @JoinColumn(name = "owner_id" , referencedColumnName = "id")
     @JsonIgnore
     private Owner owner;
 

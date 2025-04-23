@@ -23,19 +23,6 @@ public class RequestService {
     private final PostRepository postRepository;
     private final OwnerRepository ownerRepository;
 
-    public void update(){
-
-    }
-
-    public List<Request> getAll(){
-        return requestRepository.findAll();
-    }
-
-
-    public void delete(){
-
-    }
-
     // Ayman
     // This is where the request get asked by the user given the post id and the renter id
     public void requestApartment(Integer renterId, Integer postId, int months) {
@@ -59,10 +46,14 @@ public class RequestService {
 
         // Make the request (make the request object) and mark the request status as pending.
         Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
-        renter.getRequests().add(request);
-
-        // Save the objects in the database.
+        // Add the post to the request.
+        request.setPost(post);
+        // Add the renter to the request.
+        request.setRenter(renter);
+        // Save the request in the database.
         requestRepository.save(request);
+        post.getRequest().add(request);
+        renter.getRequests().add(request);
         renterRepository.save(renter);
     }
 

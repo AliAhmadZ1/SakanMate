@@ -10,6 +10,7 @@ import com.example.sakanmate.Repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 @Service
@@ -69,7 +70,10 @@ public class ApartmentService {
         apartment.setOwner(owner);
         apartment.setNumber_of_remaining(apartment.getMax_renters());
         apartmentRepository.save(apartment);
-        //owner.getApartments().add(apartment);
+        try {
+            owner.getApartments().add(apartment); // may trigger ConcurrentModificationException
+        } catch (ConcurrentModificationException e) {
+        }
         ownerRepository.save(owner);
 
     }

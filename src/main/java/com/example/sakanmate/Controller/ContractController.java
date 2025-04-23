@@ -76,7 +76,7 @@ public class ContractController {
     @PostMapping("/create-contract/{adminId}/{requestId}")
     public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
         contractService.createContract(adminId, requestId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully"));
     }
 
     @PutMapping("/approve-by-owner/{id}/{ownerId}")
