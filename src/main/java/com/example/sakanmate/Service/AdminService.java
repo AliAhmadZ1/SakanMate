@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @Service
 @AllArgsConstructor
@@ -27,9 +26,6 @@ public class AdminService {
 
     public Admin getAllAdmin(Integer id) {
         return adminRepository.findAdminsById(id);
-    public List<Admin> getAllAdmin( ) {
-
-        return repo.findAll();
     }
 
     public void addAdmin(Admin admin) {
@@ -80,7 +76,7 @@ public class AdminService {
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
         Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
-                LocalDateTime.now().plusMonths(request.getMonths()), null, request.getPost().getApartment(), request.getPost().getOwner());
+                LocalDateTime.now().plusMonths(request.getMonths()),false,false,null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
         contractRepository.save(contract);

@@ -85,9 +85,9 @@ public class ContractService {
             document.add(Chunk.NEWLINE); // Blank line
             // Format the renters
             StringBuilder renters = new StringBuilder("");
-            for(Renter renter : contract.getRenters()){
-                renters.append("Name: " + renter.getName() + "\nEmail: " + renter.getEmail() + "\n---------\n");
-            }
+//            for(Renter renter : contract.getRenters()){
+//                renters.append("Name: " + renter.getName() + "\nEmail: " + renter.getEmail() + "\n---------\n");
+//            }
             // Format the pdf
             document.add(new Paragraph("---------------------------------------------------------------------"));
             document.add(new Paragraph("Contract ID: " + contract.getId()));

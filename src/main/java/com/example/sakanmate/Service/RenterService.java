@@ -123,7 +123,7 @@ public class RenterService {
         // Check if the contract belong to the renter ************8
 
         // Add the renter to the contract renters * renter accepting the contract.
-        contract.getRenters().add(renter);
+//        contract.getRenters().add(renter);
     }
 
     public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
@@ -136,9 +136,9 @@ public class RenterService {
         if (apartment == null) throw new ApiException("Apartment not found.");
 
         // Check if the apartment does not belong to the renter
-        if(!apartment.getContract().getRenters().contains(renter)) throw new ApiException("The apartment does not belong to the renter.");
+//        if(!apartment.getContract().getRenters().contains(renter)) throw new ApiException("The apartment does not belong to the renter.");
 
         // Make the complaint
-        Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
+        Complaint complaint = new Complaint(null, title, description,null,null, renter, apartment);
     }
 }

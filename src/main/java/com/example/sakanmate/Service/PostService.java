@@ -38,7 +38,7 @@ public class PostService {
         if (owner==null)
             throw new ApiException("owner don't found");
         postDTO.setPostDate(LocalDate.now());
-        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,null,apartment,owner,null);
+        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,false,LocalDateTime.now(),"",null,apartment,owner,null);
         postRepository.save(post);
     }
 
@@ -48,7 +48,6 @@ public class PostService {
             throw new ApiException("Post not found");
 
         oldPost.setStatus(postDTO.getStatus());
-        oldPost.setStatus(post.getStatus());
         postRepository.save(oldPost);
     }
 

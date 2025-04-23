@@ -33,13 +33,9 @@ public class Renter {
     @ManyToOne
     @JoinColumn(name = "contract_id")
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "renter")
-    @PrimaryKeyJoinColumn
     private Contract contract;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "renter")
-    @JsonIgnore
-    @OneToMany(mappedBy = "renter")
     private Set<Request> requests;
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "renter")
