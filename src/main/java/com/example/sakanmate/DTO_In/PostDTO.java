@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PostDTO {
 
-    private Integer apartment_id;
     @Pattern(regexp = "approved|pending|canceled|rented")
     private String status;
     private LocalDate postDate;
+
 }

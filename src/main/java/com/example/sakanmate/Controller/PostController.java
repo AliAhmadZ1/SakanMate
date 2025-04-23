@@ -21,11 +21,11 @@ public class PostController {
         return ResponseEntity.status(200).body(postService.getAll());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addPost(@RequestBody @Valid PostDTO postDTO){
-        postService.addPost(postDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("post added"));
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity addPost(@RequestBody @Valid PostDTO postDTO){
+//        postService.addPost(postDTO);
+//        return ResponseEntity.status(200).body(new ApiResponse("post added"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody@Valid PostDTO postDTO){

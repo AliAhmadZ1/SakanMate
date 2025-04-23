@@ -43,4 +43,10 @@ public class ApartmentController {
         apartmentService.approveApartment(id,adminId);
         return ResponseEntity.ok("Apartment approved.");
     }
+
+    @PutMapping("/reject-apartment/{id}/{adminId}")
+    public ResponseEntity<String> rejectApartment(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
+        apartmentService.rejectApartment(id, reason, adminId);
+        return ResponseEntity.ok("Apartment rejected.");
+    }
 }

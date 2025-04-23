@@ -54,11 +54,11 @@ public class OwnerService {
     public void approveOwner(Integer ownerId,Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {
-            throw new RuntimeException("Admin not found");
+            throw new ApiException("Admin not found");
         }
         Owner owner = ownerRepository.findOwnerById(ownerId);
         if (owner==null){
-            throw new RuntimeException("Owner not found");
+            throw new ApiException("Owner not found");
         }
 
         owner.setApproved(true);
@@ -68,11 +68,11 @@ public class OwnerService {
     public void rejectOwnerByAdmin(Integer id, String reason,Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {
-            throw new RuntimeException("Admin not found");
+            throw new ApiException("Admin not found");
         }
         Owner owner = ownerRepository.findOwnerById(id);
         if (owner==null){
-            throw new RuntimeException("Owner not found");
+            throw new ApiException("Owner not found");
         }
 
         owner.setApproved(false);

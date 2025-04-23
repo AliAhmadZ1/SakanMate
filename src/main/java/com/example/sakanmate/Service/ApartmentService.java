@@ -3,6 +3,7 @@ package com.example.sakanmate.Service;
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Apartment;
+import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ApartmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,14 +51,28 @@ public class ApartmentService {
     public void approveApartment(Integer apartmentId,Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {
-            throw new RuntimeException("Admin not found");
+            throw new ApiException("Admin not found");
         }
         Apartment apt = apartmentRepository.findApartmentById(apartmentId);
         if (apt==null){
-            throw new RuntimeException("Apartment not found");
+            throw new ApiException("Apartment not found");
         }
 
         apt.setApproved(true);
         apartmentRepository.save(apt);
+    }
+    public void rejectApartment(Integer id, String reason,Integer adminId) {
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null) {
+            throw new ApiException("Admin not found");
+        }
+        Apartment apartment = apartmentRepository.findApartmentById(id);
+        if (apartment==null){
+            throw new ApiException("Apartment not found");
+        }
+
+        apartment.setApproved(false);
+        apartment.setRejectionReason(reason);
+        apartmentRepository.save(apartment);
     }
 }
