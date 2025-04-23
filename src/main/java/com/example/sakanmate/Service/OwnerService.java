@@ -24,6 +24,7 @@ public class OwnerService {
     private final AdminRepository adminRepository;
     private final ApartmentRepository apartmentRepository;
     private final ApartmentReviewRepository apartmentReviewRepository;
+    private final ContractRepository contractRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -134,6 +135,15 @@ public class OwnerService {
         }
         averageRating = sumOfAverageRating/averageCounter;
         return averageRating;
+    }
+
+    public Double getOwnerRevenue(Integer ownerId){
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if(owner == null) throw new ApiException("Owner not found.");
+        List<Contract> contracts = contractRepository.findApprovedContractsByOwnerId(ownerId);
+        Double totalRevenue = 0.0;
+        for (Contract contract : contracts) totalRevenue += contract.getTotalPrice();
+        return totalRevenue;
     }
 
 }
