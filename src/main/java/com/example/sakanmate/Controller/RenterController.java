@@ -57,11 +57,4 @@ public class RenterController {
         return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));
 
     }
-
-    @PostMapping("/file-complaint/{renterId}/{apartmentId}")
-    public ResponseEntity<ApiResponse> fileComplaint(@PathVariable Integer renterId, @PathVariable Integer apartmentId, @RequestBody String title, @RequestBody String description){
-        renterService.fileAComplaint(renterId, apartmentId, title, description);
-        return ResponseEntity.status(200).body(new ApiResponse("Complaint filed successfully."));
-    }
-
 }

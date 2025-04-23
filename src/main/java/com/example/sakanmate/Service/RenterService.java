@@ -110,23 +110,4 @@ public class RenterService {
         request.setState("canceled");
         requestRepository.save(request);
     }
-
-
-
-    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description) {
-        // Check if the renter exists in the database.
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter == null) throw new ApiException("Renter not found.");
-
-        // Check if the contract exists in the database.
-        Apartment apartment = apartmentRepository.findApartmentById(apartmentId);
-        if (apartment == null) throw new ApiException("Apartment not found.");
-
-        // Check if the apartment does not belong to the renter
-        if (!apartment.getContract().getRenters().contains(renter))
-            throw new ApiException("The apartment does not belong to the renter.");
-
-        // Make the complaint
-        Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
-    }
 }
