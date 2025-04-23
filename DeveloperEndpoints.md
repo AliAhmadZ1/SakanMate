@@ -26,6 +26,7 @@
 10. `aproveRenewedContract` - Approves renewed contract
 11. `deleteReviewByAdmin` - Removes review (Admin)
 12. `rejectApartment` - Rejects apartment with reason
+13. searchByGender` - Search renters by gender
 
 ## Ali's Endpoints
 1. `makeReview` - Creates apartment review
@@ -34,3 +35,7 @@
 4. `disableOwner` - Deactivates owner account
 5. `upVoteReview` - Upvotes a review
 6. `downVoteReview` - Downvotes a review
+7. `getOwnerTotalRevenue` - Get the owners revenue
+8. `getNewPosts` - Get the avaliabe posts
+9. `getOwnerNumberOfRenters` - Get the total number of renters
+10. `contractEndingNotification` - Send an email to the renter 10 days before the contract end
