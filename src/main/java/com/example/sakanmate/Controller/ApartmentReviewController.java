@@ -39,17 +39,24 @@ public class ApartmentReviewController {
         return ResponseEntity.ok("Review deleted successfully.");
     }
 
+    // Endpoint 4
+    //ali
     @PutMapping("/up-vote/{renter_id}/review/{review_id}")
     public ResponseEntity upVoteReview(@PathVariable Integer renter_id, @PathVariable Integer review_id){
         apartmentReviewService.upVoteReview(renter_id, review_id);
         return ResponseEntity.status(200).body(new ApiResponse("up vote review"));
     }
 
+    // Endpoint 5
+    //ali
     @PutMapping("/down-vote/{renter_id}/review/{review_id}")
     public ResponseEntity downVoteReview(@PathVariable Integer renter_id, @PathVariable Integer review_id){
         apartmentReviewService.downVoteReview(renter_id, review_id);
         return ResponseEntity.status(200).body(new ApiResponse("down vote review"));
     }
+
+    // Endpoint 6
+    //khadija
     @DeleteMapping("/reviews/{id}/{adminId}")
     public ResponseEntity<String> deleteReviewByAdmin(
             @PathVariable Integer id,

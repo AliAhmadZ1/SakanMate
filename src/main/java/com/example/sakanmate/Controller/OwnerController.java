@@ -42,6 +42,7 @@ public class OwnerController {
         return ResponseEntity.status(200).body(new ApiResponse("owner deleted"));
     }
 
+    // Endpoint 16
     //khadija
     @PutMapping("/owners/{id}/approve/{adminId}")
     public ResponseEntity<String> approveOwner(@PathVariable Integer id,@PathVariable Integer adminId) {
@@ -49,6 +50,7 @@ public class OwnerController {
         return ResponseEntity.ok("Owner approved.");
     }
 
+    // Endpoint 17
     //khadija
     @PutMapping("/reject-by-admin/{id}/{adminId}")
     public ResponseEntity<String> rejectOwnerByAdmin(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
@@ -56,6 +58,7 @@ public class OwnerController {
         return ResponseEntity.ok("Owner rejected based on license.");
     }
 
+    // Endpoint 18
     //ali
     @PutMapping("/disable-owner/admin/{admin_id}/owner/{owner_id}")
     public ResponseEntity disableOwner(@PathVariable Integer admin_id, @PathVariable Integer owner_id){

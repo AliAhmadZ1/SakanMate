@@ -39,18 +39,23 @@ public class PostController {
         return ResponseEntity.status(200).body(new ApiResponse("post deleted"));
     }
 
+    // Endpoint 19
     //khadija
     @PutMapping("/posts/{postId}/approve/{adminId}")
     public ResponseEntity<String> approvePost(@PathVariable Integer postId, @PathVariable Integer adminId) {
         postService.approveAndPublishPost(postId, adminId);
         return ResponseEntity.ok("Post approved by admin.");
     }
+
+    // Endpoint 20
     //khadija
     @PutMapping("/cancel-posts/{id}/{ownerId}")
     public ResponseEntity<String> cancelPost(@PathVariable Integer id, @PathVariable Integer ownerId) {
         postService.cancelPost(id, ownerId);
         return ResponseEntity.ok("Post canceled.");
     }
+
+    // Endpoint 21
     //khadija
     @PutMapping("/posts/{id}/{adminId}")
     public ResponseEntity<String> rejectPost(@PathVariable Integer id, @RequestBody String reason, @PathVariable Integer adminId) {
@@ -58,6 +63,8 @@ public class PostController {
         return ResponseEntity.ok("Post rejected successfully.");
     }
 
+    // Endpoint 22
+    //ali
     @PostMapping("create-post/{id}/apartment/{apartment_id}")
     public ResponseEntity createPost(@PathVariable Integer id, @PathVariable Integer apartment_id) {
         postService.createPost(id, apartment_id);

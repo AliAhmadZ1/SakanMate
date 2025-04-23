@@ -41,6 +41,7 @@ public class RenterController {
         return ResponseEntity.status(200).body(new ApiResponse("Renter deleted successfully."));
     }
 
+    // Endpoint 23
     //Ali ALshehri
     @PostMapping("/make-review/{id}/apartment/{apartment_id}")
     public ResponseEntity makeReview(@PathVariable Integer id, @PathVariable Integer apartment_id, @RequestBody@Valid ApartmentReview apartmentReview){

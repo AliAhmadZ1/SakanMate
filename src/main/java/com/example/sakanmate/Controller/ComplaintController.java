@@ -36,12 +36,16 @@ public class ComplaintController {
         return ResponseEntity.ok("Complaint deleted successfully.");
     }
 
+    // Endpoint 7
+    //ayman
     @PostMapping("/file-complaint/{renterId}/{apartmentId}")
     public ResponseEntity<ApiResponse> fileComplaint(@PathVariable Integer renterId, @PathVariable Integer apartmentId, @RequestBody String title, @RequestBody String description){
         complaintService.fileAComplaint(renterId, apartmentId, title, description);
         return ResponseEntity.status(200).body(new ApiResponse("Complaint filed successfully."));
     }
 
+    // Endpoint 8
+    //ayman
     @PutMapping("/assign-complaint-to-admin/{adminId}/{complaintId}")
     public ResponseEntity<ApiResponse> assignComplaintToAdmin(@PathVariable Integer adminId, @PathVariable Integer complaintId){
         complaintService.assignComplaintToAdmin(adminId, complaintId);
