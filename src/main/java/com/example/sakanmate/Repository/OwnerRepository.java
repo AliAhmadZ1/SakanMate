@@ -18,4 +18,6 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
     @Modifying
     @Query("DELETE FROM Owner o WHERE o.id = :id")
     void deleteById(@Param("id") Integer id);
+
+
 }

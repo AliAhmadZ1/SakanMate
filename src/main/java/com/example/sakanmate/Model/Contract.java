@@ -40,7 +40,6 @@ public class Contract {
     private Boolean isRenewed = false;
     private Boolean ownerApproved = false;
     private Boolean renterAccepted = false;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
     private Set<Renter> renters;
 

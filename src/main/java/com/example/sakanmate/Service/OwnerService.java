@@ -24,6 +24,7 @@ public class OwnerService {
     private final AdminRepository adminRepository;
     private final ApartmentRepository apartmentRepository;
     private final ApartmentReviewRepository apartmentReviewRepository;
+    private final ContractRepository contractRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -48,7 +49,7 @@ public class OwnerService {
     public void deleteOwner(Integer id) {
         // Check owner
         Owner owner = ownerRepository.findOwnerById(id);
-        if(owner == null) throw new ApiException("Owner not found.");
+        if (owner == null) throw new ApiException("Owner not found.");
 
         // Break all relationships using bulk update
         apartmentRepository.detachAllApartmentsFromOwner(id);
@@ -58,13 +59,13 @@ public class OwnerService {
     }
 
 
-    public void approveOwner(Integer ownerId,Integer adminId) {
+    public void approveOwner(Integer ownerId, Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {
             throw new ApiException("Admin not found");
         }
         Owner owner = ownerRepository.findOwnerById(ownerId);
-        if (owner==null){
+        if (owner == null) {
             throw new ApiException("Owner not found");
         }
 
@@ -72,16 +73,16 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
-    public void rejectOwnerByAdmin(Integer id, String reason,Integer adminId) {
+    public void rejectOwnerByAdmin(Integer id, String reason, Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {
             throw new ApiException("Admin not found");
         }
         Owner owner = ownerRepository.findOwnerById(id);
-        if (owner==null){
+        if (owner == null) {
             throw new ApiException("Owner not found");
         }
-        if (reason==null){
+        if (reason == null) {
             throw new ApiException(reason);
         }
         owner.setApproved(false);
@@ -91,12 +92,12 @@ public class OwnerService {
 
     //ali
     // disable owner depend on average of rating and number of apartments
-    public void disableOwner(Integer admin_id, Integer owner_id){
+    public void disableOwner(Integer admin_id, Integer owner_id) {
         Admin admin = adminRepository.findAdminsById(admin_id);
         Owner owner = ownerRepository.findOwnerById(owner_id);
-        if (admin==null)
+        if (admin == null)
             throw new ApiException("admin not found");
-        if (owner==null)
+        if (owner == null)
             throw new ApiException("owner not found");
         if (!owner.isApproved())
             throw new ApiException("owner is already disabled");
@@ -106,7 +107,7 @@ public class OwnerService {
 
         // the condition to disable is average rating less than 2/5 and number of apartment greater than 5
         double result = calculateAverageRatingByOwner(apartments);
-        if (result>2&&apartments.size()<5)
+        if (result > 2 && apartments.size() < 5)
             throw new ApiException("cannot disable this owner because of newly registered");
 
         //when meet all conditions
@@ -116,15 +117,15 @@ public class OwnerService {
     }
 
     // helping method to calculate
-    public double calculateAverageRatingByOwner(List<Apartment> apartments){
+    public double calculateAverageRatingByOwner(List<Apartment> apartments) {
         double averageRating = 0.0;
         double sumOfAverageRating = 0.0;
         int sumOfRating = 0;
-        int counter=0;
-        int averageCounter=0;
-        for (Apartment a:apartments){
+        int counter = 0;
+        int averageCounter = 0;
+        for (Apartment a : apartments) {
             Set<ApartmentReview> apartmentReviews = a.getApartmentReviews();
-            for (ApartmentReview ar:apartmentReviews){
+            for (ApartmentReview ar : apartmentReviews) {
                 sumOfRating = sumOfRating + ar.getRating();
                 counter++;
             }
@@ -132,8 +133,26 @@ public class OwnerService {
             sumOfAverageRating = sumOfAverageRating + averageRating;
             averageCounter++;
         }
-        averageRating = sumOfAverageRating/averageCounter;
+        averageRating = sumOfAverageRating / averageCounter;
         return averageRating;
+    }
+
+    public Double getOwnerRevenue(Integer ownerId) {
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner == null) throw new ApiException("Owner not found.");
+        List<Contract> contracts = contractRepository.findApprovedContractsByOwnerId(ownerId);
+        Double totalRevenue = 0.0;
+        for (Contract contract : contracts) totalRevenue += contract.getTotalPrice();
+        return totalRevenue;
+    }
+
+    public Integer getOwnerNumberOfRenters(Integer ownerId){
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner == null) throw new ApiException("Owner not found.");
+        List<Contract> contracts = contractRepository.findApprovedContractsByOwnerId(ownerId);
+        Integer numberOfRenters = 0;
+        for (Contract contract : contracts) numberOfRenters += contract.getRenters().size();
+        return numberOfRenters;
     }
 
 }

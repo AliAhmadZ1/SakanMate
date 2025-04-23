@@ -10,10 +10,12 @@ import com.example.sakanmate.Repository.OwnerRepository;
 import com.example.sakanmate.Service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/sakan-mate/post")
@@ -69,5 +71,10 @@ public class PostController {
     public ResponseEntity createPost(@PathVariable Integer id, @PathVariable Integer apartment_id) {
         postService.createPost(id, apartment_id);
         return ResponseEntity.status(200).body(new ApiResponse("new post created"));
+    }
+
+    @GetMapping("/get-new-posts")
+    public ResponseEntity<List<Post>> getNewPosts(){
+        return ResponseEntity.status(HttpStatus.OK).body(postService.getNewPosts());
     }
 }
