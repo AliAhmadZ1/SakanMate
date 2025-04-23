@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ApartmentRepository extends JpaRepository<Apartment,Integer> {
 
@@ -22,4 +24,6 @@ public interface ApartmentRepository extends JpaRepository<Apartment,Integer> {
     @Modifying
     @Query("DELETE FROM Apartment a WHERE a.owner.id = :ownerId")
     void deleteByOwnerId(@Param("ownerId") Integer ownerId);
+
+    List<Apartment> findApartmentByOwnerId(Integer owner_id);
 }
