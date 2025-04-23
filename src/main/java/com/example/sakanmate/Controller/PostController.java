@@ -1,6 +1,7 @@
 package com.example.sakanmate.Controller;
 
 import com.example.sakanmate.Api.ApiResponse;
+import com.example.sakanmate.DTO_In.PostDTO;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Service.PostService;
 import jakarta.validation.Valid;
@@ -21,14 +22,14 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addPost(@RequestBody @Valid Post post){
-        postService.addPost(post);
+    public ResponseEntity addPost(@RequestBody @Valid PostDTO postDTO){
+        postService.addPost(postDTO);
         return ResponseEntity.status(200).body(new ApiResponse("post added"));
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody@Valid Post post){
-        postService.updatePost(id, post);
+    public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody@Valid PostDTO postDTO){
+        postService.updatePost(id, postDTO);
         return ResponseEntity.status(200).body(new ApiResponse("post updated"));
     }
 
