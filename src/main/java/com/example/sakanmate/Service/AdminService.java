@@ -2,12 +2,16 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.*;
+import com.example.sakanmate.Model.Admin;
+import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ComplaintRepository;
 import com.example.sakanmate.Repository.ContractRepository;
 import com.example.sakanmate.Repository.RequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -23,6 +27,9 @@ public class AdminService {
 
     public Admin getAllAdmin(Integer id) {
         return adminRepository.findAdminsById(id);
+    public List<Admin> getAllAdmin( ) {
+
+        return repo.findAll();
     }
 
     public void addAdmin(Admin admin) {
@@ -93,4 +100,5 @@ public class AdminService {
         // Save the complaint
         complaintRepository.save(complaint);
     }
+
 }

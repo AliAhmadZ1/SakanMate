@@ -51,4 +51,31 @@ public class ContractController {
                 .contentType(MediaType.APPLICATION_PDF) // Sets MIME type
                 .body(pdfBytes);
     }
+
+    @PutMapping("/accept/{id}/{renterId}")
+    public ResponseEntity<String> acceptContract(
+            @PathVariable Integer id,
+            @PathVariable Integer renterId) {
+        contractService.renterAcceptContract(id, renterId);
+        return ResponseEntity.ok("Contract accepted by renter.");
+    }
+
+    @GetMapping("/is-expired/{id}")
+    public ResponseEntity<Boolean> isContractExpired(@PathVariable Integer id) {
+        return ResponseEntity.ok(contractService.isContractExpired(id));
+    }
+
+    @PostMapping("/{oldId}/renew")
+    public ResponseEntity<Contract> requestRenewal(
+            @PathVariable Integer oldId,
+            @RequestParam int months) {
+        Contract newContract = contractService.requestRenewal(oldId, months);
+        return ResponseEntity.ok(newContract);
+    }
+
+    @PutMapping("/{id}/approve-renewal")
+    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id) {
+        contractService.approveRenewedContract(id);
+        return ResponseEntity.ok("Renewed contract approved by admin.");
+    }
 }

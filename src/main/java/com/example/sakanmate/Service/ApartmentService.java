@@ -43,4 +43,15 @@ public class ApartmentService {
 
         apartmentRepository.delete(apartment);
     }
+
+    public void approveApartment(Integer apartmentId) {
+        Apartment apt = apartmentRepository.findApartmentById(apartmentId);
+        if (apt==null){
+            throw new RuntimeException("Apartment not found");
+        }
+
+
+        apt.setApproved(true);
+        apartmentRepository.save(apt);
+    }
 }

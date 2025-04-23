@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.pl.NIP;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -32,6 +33,11 @@ public class Post {
     private LocalDate postDate;
     @Column(columnDefinition = "int")
     private Integer numberOfApprovedRequests;
+    private boolean approved=false;
+    private LocalDateTime ApprovedDate;
+    private String rejectionReason;
+
+
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @JsonIgnore

@@ -37,6 +37,9 @@ public class Apartment {
     @Column(columnDefinition = "double not null")
     private double monthlyPrice;
 
+    private boolean isApproved = false;
+
+
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
     @PrimaryKeyJoinColumn
     private Post post;

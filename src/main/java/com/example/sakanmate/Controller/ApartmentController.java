@@ -37,4 +37,10 @@ public class ApartmentController {
         apartmentService.deleteApartment(id);
         return ResponseEntity.status(200).body(new ApiResponse("apartment deleted"));
     }
+
+    @PutMapping("/apartments/{id}/approve")
+    public ResponseEntity<String> approveApartment(@PathVariable Integer id) {
+        apartmentService.approveApartment(id);
+        return ResponseEntity.ok("Apartment approved.");
+    }
 }

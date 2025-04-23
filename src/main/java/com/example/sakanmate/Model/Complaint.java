@@ -19,6 +19,7 @@ public class Complaint {
 
     private String title;
     private String description;
+    private Integer apartmentId;
 
     @ManyToOne
     @JoinColumn(name = "admin_complaint_id", referencedColumnName = "id")

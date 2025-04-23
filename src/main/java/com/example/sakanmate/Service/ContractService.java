@@ -2,18 +2,24 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ContractDtoOut;
+import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Contract;
 import com.example.sakanmate.Model.Renter;
+import com.example.sakanmate.Model.Renter;
+import com.example.sakanmate.Repository.ApartmentRepository;
 import com.example.sakanmate.Repository.ContractRepository;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
+import com.example.sakanmate.Repository.RenterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContractService {
     private final ContractRepository contractRepository;
+    private final ApartmentRepository apartmentRepository;
+    private final RenterRepository renterRepository;
 
     public List<ContractDtoOut> getAllContracts() {
         List<Contract> contracts = contractRepository.findAll();
@@ -98,5 +106,78 @@ public class ContractService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate PDF", e);
         }
+    }
+
+    public void renterAcceptContract(Integer contractId, Integer renterId) {
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract==null){
+            throw new RuntimeException("Contract not found");
+        }
+
+        if (contract.getRenter() != null) {
+            throw new RuntimeException("Contract is already accepted.");
+        }
+
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter==null){
+            throw new RuntimeException("Renter not found");
+        }
+
+        contract.setRenter(renter);
+        contractRepository.save(contract);
+
+        Apartment apartment = contract.getApartment();
+        apartment.setNumber_of_remaining(apartment.getNumber_of_remaining() - 1);
+        apartmentRepository.save(apartment);
+    }
+
+    public boolean isContractExpired(Integer contractId) {
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract==null){
+            throw new RuntimeException("Contract not found");
+        }
+
+        return LocalDateTime.now().isAfter(contract.getEndDate());
+    }
+
+    public Contract requestRenewal(Integer oldContractId, int monthsToExtend) {
+        Contract oldContract = contractRepository.findContractById(oldContractId);
+        if (oldContract==null){
+            throw new RuntimeException("Old contract not found");
+        }
+
+        if (LocalDateTime.now().isBefore(oldContract.getEndDate())) {
+            throw new RuntimeException("Current contract is still active");
+        }
+
+        Contract newContract = new Contract();
+        newContract.setApartment(oldContract.getApartment());
+        newContract.setOwner(oldContract.getOwner());
+        newContract.setStartDate(LocalDateTime.now());
+        newContract.setEndDate(LocalDateTime.now().plusMonths(monthsToExtend));
+        newContract.setTotalPrice(oldContract.getTotalPrice() * monthsToExtend);
+        newContract.setIsRenewed(true);
+        newContract.setAdminApproved(false);
+        newContract.setRenter(oldContract.getRenter());
+
+        return contractRepository.save(newContract);
+    }
+
+    public void approveRenewedContract(Integer contractId) {
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract==null){
+            throw new RuntimeException("Contract not found");
+        }
+
+        if (!contract.getIsRenewed()) {
+            throw new RuntimeException("This is not a renewal contract.");
+        }
+
+        contract.setAdminApproved(true);
+        contractRepository.save(contract);
+
+        Apartment apt = contract.getApartment();
+        apt.setNumber_of_remaining(apt.getNumber_of_remaining() - 1);
+        apartmentRepository.save(apt);
     }
 }

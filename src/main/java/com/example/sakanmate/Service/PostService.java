@@ -4,14 +4,17 @@ import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DTO_In.PostDTO;
 import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Owner;
+import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Repository.ApartmentRepository;
 import com.example.sakanmate.Repository.OwnerRepository;
+import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,6 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final ApartmentRepository apartmentRepository;
     private final OwnerRepository ownerRepository;
+    private final AdminRepository adminRepository;
 
     public List<Post> getAll(){
         return postRepository.findAll();
@@ -44,6 +48,7 @@ public class PostService {
             throw new ApiException("Post not found");
 
         oldPost.setStatus(postDTO.getStatus());
+        oldPost.setStatus(post.getStatus());
         postRepository.save(oldPost);
     }
 
@@ -53,5 +58,53 @@ public class PostService {
             throw new ApiException("post not found");
 
         postRepository.delete(post);
+    }
+    public void approvePost(Integer postId, Integer adminId) {
+        Post post = postRepository.findPostById(postId);
+        if (post==null){
+            throw new RuntimeException("Post not found");
+        }
+
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin==null){
+            throw new RuntimeException("Admin not found");
+        }
+
+        post.setStatus("APPROVED");
+        post.setApproved(true);
+        post.setApprovedDate(LocalDateTime.now());
+        post.setAdmin(admin);
+
+        postRepository.save(post);
+    }
+
+    public void cancelPost(Integer postId) {
+        Post post = postRepository.findPostById(postId);
+        if (post==null){
+            throw new RuntimeException("Post not found");
+        }
+
+        post.setStatus("CANCELED");
+        postRepository.save(post);
+    }
+
+    public void rejectPost(Integer postId, String reason, Integer adminId) {
+        Post post = postRepository.findPostById(postId);
+        if (post==null){
+            throw new RuntimeException("Post not found");
+        }
+
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin==null){
+            throw new RuntimeException("Admin not found");
+        }
+
+        post.setApproved(false);
+        post.setStatus("REJECTED");
+        post.setRejectionReason(reason);
+        post.setApprovedDate(LocalDateTime.now());
+        post.setAdmin(admin);
+
+        postRepository.save(post);
     }
 }

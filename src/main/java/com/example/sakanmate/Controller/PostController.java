@@ -39,4 +39,23 @@ public class PostController {
         return ResponseEntity.status(200).body(new ApiResponse("post deleted"));
     }
 
+    @PutMapping("/posts/{postId}/approve/{adminId}")
+    public ResponseEntity<String> approvePost(@PathVariable Integer postId, @PathVariable Integer adminId) {
+        postService.approvePost(postId, adminId);
+        return ResponseEntity.ok("Post approved by admin.");
+    }
+
+    @PutMapping("/cancel-posts/{id}")
+    public ResponseEntity<String> cancelPost(@PathVariable Integer id) {
+        postService.cancelPost(id);
+        return ResponseEntity.ok("Post canceled.");
+    }
+
+    @PutMapping("/posts/{id}/{adminId}")
+    public ResponseEntity<String> rejectPost(@PathVariable Integer id, @RequestBody String reason, @PathVariable Integer adminId) {
+        postService.rejectPost(id, reason, adminId);
+        return ResponseEntity.ok("Post rejected successfully.");
+    }
+
+
 }
