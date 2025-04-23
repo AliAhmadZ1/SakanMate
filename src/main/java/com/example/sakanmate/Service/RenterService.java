@@ -2,12 +2,8 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.RenterDtoOut;
-import com.example.sakanmate.Model.Post;
-import com.example.sakanmate.Model.Renter;
-import com.example.sakanmate.Model.Request;
-import com.example.sakanmate.Repository.PostRepository;
-import com.example.sakanmate.Repository.RenterRepository;
-import com.example.sakanmate.Repository.RequestRepository;
+import com.example.sakanmate.Model.*;
+import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +17,8 @@ public class RenterService {
     private final RenterRepository renterRepository;
     private final PostRepository postRepository;
     private final RequestRepository requestRepository;
+    private final ContractRepository contractRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public List<RenterDtoOut> getAllRenters() {
         List<Renter> renters = renterRepository.findAll();
@@ -55,7 +53,7 @@ public class RenterService {
 
     //1-
     // This is where the request get asked by the user given the post id and the renter id
-    public void requestApartment(Integer renterId, Integer postId) {
+    public void requestApartment(Integer renterId, Integer postId, int months) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
@@ -71,14 +69,15 @@ public class RenterService {
             case "rented" -> throw new ApiException("This apartment has been rented.");
         }
 
+        // Check the months
+        if(months < 1) throw new ApiException("The months need to greater than 1.");
+
         // Make the request (make the request object) and mark the request status as pending.
-        //*******************ERROR***************
-        Request request = new Request(null, "pending", LocalDateTime.now(), renter, post);
+        Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
         renter.getRequests().add(request);
 
         // Save the objects in the database.
         requestRepository.save(request);
-        //*******************ERROR***************
         renterRepository.save(renter);
     }
 
@@ -110,5 +109,36 @@ public class RenterService {
         // Change the state and save the request.
         request.setState("canceled");
         requestRepository.save(request);
+    }
+
+    public void acceptContract(Integer renterId, Integer contractId){
+        // Check if the renter exists in the database.
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter == null) throw new ApiException("Renter not found.");
+
+        // Check if the contract exists in the database.
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract == null) throw new ApiException("Contract not found.");
+
+        // Check if the contract belong to the renter ************8
+
+        // Add the renter to the contract renters * renter accepting the contract.
+        contract.getRenters().add(renter);
+    }
+
+    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
+        // Check if the renter exists in the database.
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter == null) throw new ApiException("Renter not found.");
+
+        // Check if the contract exists in the database.
+        Apartment apartment = apartmentRepository.findApartmentById(apartmentId);
+        if (apartment == null) throw new ApiException("Apartment not found.");
+
+        // Check if the apartment does not belong to the renter
+        if(!apartment.getContract().getRenters().contains(renter)) throw new ApiException("The apartment does not belong to the renter.");
+
+        // Make the complaint
+        Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
     }
 }

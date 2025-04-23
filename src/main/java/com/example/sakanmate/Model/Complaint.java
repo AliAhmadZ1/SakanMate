@@ -19,8 +19,6 @@ public class Complaint {
 
     private String title;
     private String description;
-    private Integer apartmentId;
-    private Integer renterId;
 
     @ManyToOne
     @JoinColumn(name = "admin_complaint_id", referencedColumnName = "id")
@@ -30,4 +28,9 @@ public class Complaint {
     @JoinColumn(name = "renter_complaint_id", referencedColumnName = "id")
     @JsonIgnore
     private Renter renter;
+
+    @ManyToOne
+    @JoinColumn(name = "apartment_complaint_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Apartment apartment;
 }
