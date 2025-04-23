@@ -107,5 +107,19 @@ public class OwnerService {
         apartmentRepository.save(apartment);
     }
 
-
+    //ali
+    // disable owner depend on number of complaints and rating
+    public void disableOwner(Integer admin_id, Integer owner_id){
+        Admin admin = adminRepository.findAdminsById(admin_id);
+        Owner owner = ownerRepository.findOwnerById(owner_id);
+        if (admin==null)
+            throw new ApiException("admin not found");
+        if (owner==null)
+            throw new ApiException("owner not found");
+        if (!owner.isApproved())
+            throw new ApiException("owner is already disabled");
+        owner.setApproved(false);
+        owner.setRejectionReason("This owner did not meet the requirements.");
+        ownerRepository.save(owner);
+    }
 }
