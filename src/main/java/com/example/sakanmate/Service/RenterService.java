@@ -35,7 +35,7 @@ public class RenterService {
         List<RenterDtoOut> renterDtoOuts = new ArrayList<>();
 
         for (Renter renter : renters) {
-            RenterDtoOut renterDtoOut = new RenterDtoOut(renter.getName(), renter.getEmail());
+            RenterDtoOut renterDtoOut = new RenterDtoOut(renter.getName(), renter.getEmail(),renter.getGender());
             renterDtoOuts.add(renterDtoOut);
         }
 
@@ -52,6 +52,7 @@ public class RenterService {
         tempRenterObject.setEmail(renter.getEmail());
         tempRenterObject.setName(renter.getName());
         tempRenterObject.setPassword(renter.getPassword());
+        tempRenterObject.setGender(renter.getGender());
         renterRepository.save(tempRenterObject);
     }
 
