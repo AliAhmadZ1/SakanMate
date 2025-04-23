@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class Renter {
     private String email;
     @NotEmpty(message = "The password can not be empty.")
     private String password;
+    @Pattern(regexp = "^(?i)(male|female)$", message = "Gender must be 'male' or 'female'")
+    private String gender;
+
 
     @ManyToOne
     @JoinColumn(name = "contract_id")
