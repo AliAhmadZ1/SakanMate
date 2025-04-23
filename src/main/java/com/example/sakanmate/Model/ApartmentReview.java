@@ -28,8 +28,9 @@ public class ApartmentReview {
     private Integer rating;
 
     private String comment;
-
+    @Column(columnDefinition = "int not null")
     private int up_vote;
+    @Column(columnDefinition = "int not null")
     private int down_vote;
 
     @ManyToOne
