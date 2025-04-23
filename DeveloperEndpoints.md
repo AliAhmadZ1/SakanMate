@@ -28,11 +28,9 @@
 12. `rejectApartment` - Rejects apartment with reason
 
 ## Ali's Endpoints
-1. `assignComplaintToAdmin` - Assigns complaint to admin
-2. `fileComplaint` - Files new complaint
-3. `makeReview` - Creates apartment review
-4. `createPost` - Creates property listing
-5. `addApartmentToSakanMate` - Adds new apartment
-6. `disableOwner` - Deactivates owner account
-7. `upVoteReview` - Upvotes a review
-8. `downVoteReview` - Downvotes a review
+1. `makeReview` - Creates apartment review
+2. `createPost` - Creates property listing
+3. `addApartmentToSakanMate` - Adds new apartment
+4. `disableOwner` - Deactivates owner account
+5. `upVoteReview` - Upvotes a review
+6. `downVoteReview` - Downvotes a review
