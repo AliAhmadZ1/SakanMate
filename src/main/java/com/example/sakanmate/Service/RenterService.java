@@ -77,6 +77,10 @@ public class RenterService {
         apartmentReviewRepository.save(apartmentReview);
     }
 
+    public List<Renter> getRentersByGender(String gender) {
+        return renterRepository.findByGenderIgnoreCase(gender);
+    }
+
 
 
 
