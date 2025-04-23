@@ -30,8 +30,9 @@ public class Renter {
     @NotEmpty(message = "The password can not be empty.")
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "renter")
-    @PrimaryKeyJoinColumn
+    @ManyToOne
+    @JoinColumn(name = "contract_id")
+    @JsonIgnore
     private Contract contract;
     @OneToMany(mappedBy = "renter")
     private Set<Request> requests;

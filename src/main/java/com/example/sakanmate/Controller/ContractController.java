@@ -40,14 +40,6 @@ public class ContractController {
         return ResponseEntity.status(200).body(new ApiResponse("Contract deleted successfully."));
     }
 
-    @PutMapping("/accept/{id}/{renterId}")
-    public ResponseEntity<String> acceptContract(
-            @PathVariable Integer id,
-            @PathVariable Integer renterId) {
-        contractService.renterAcceptContract(id, renterId);
-        return ResponseEntity.ok("Contract accepted by renter.");
-    }
-
     @GetMapping("/is-expired/{id}")
     public ResponseEntity<Boolean> isContractExpired(@PathVariable Integer id) {
         return ResponseEntity.ok(contractService.isContractExpired(id));
@@ -65,5 +57,14 @@ public class ContractController {
     public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id) {
         contractService.approveRenewedContract(id);
         return ResponseEntity.ok("Renewed contract approved by admin.");
+    }
+
+    @PutMapping("/approve-by-owner/{id}/{ownerId}")
+    public ResponseEntity<String> approveContractByOwner(
+            @PathVariable Integer id,
+            @PathVariable Integer ownerId) {
+
+        contractService.ownerApproveContract(id, ownerId);
+        return ResponseEntity.ok("Contract approved by owner.");
     }
 }

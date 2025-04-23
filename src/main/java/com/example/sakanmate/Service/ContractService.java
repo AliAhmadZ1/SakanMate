@@ -54,29 +54,6 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
-    public void renterAcceptContract(Integer contractId, Integer renterId) {
-        Contract contract = contractRepository.findContractById(contractId);
-        if (contract==null){
-            throw new RuntimeException("Contract not found");
-        }
-
-        if (contract.getRenter() != null) {
-            throw new RuntimeException("Contract is already accepted.");
-        }
-
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter==null){
-            throw new RuntimeException("Renter not found");
-        }
-
-        contract.setRenter(renter);
-        contractRepository.save(contract);
-
-        Apartment apartment = contract.getApartment();
-        apartment.setNumber_of_remaining(apartment.getNumber_of_remaining() - 1);
-        apartmentRepository.save(apartment);
-    }
-
     public boolean isContractExpired(Integer contractId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
@@ -103,8 +80,8 @@ public class ContractService {
         newContract.setEndDate(LocalDateTime.now().plusMonths(monthsToExtend));
         newContract.setTotalPrice(oldContract.getTotalPrice() * monthsToExtend);
         newContract.setIsRenewed(true);
-        newContract.setAdminApproved(false);
-        newContract.setRenter(oldContract.getRenter());
+        newContract.setOwnerApproved(false);
+        newContract.setRenters(oldContract.getRenters());
 
         return contractRepository.save(newContract);
     }
@@ -119,11 +96,35 @@ public class ContractService {
             throw new RuntimeException("This is not a renewal contract.");
         }
 
-        contract.setAdminApproved(true);
+        contract.setOwnerApproved(true);
         contractRepository.save(contract);
 
         Apartment apt = contract.getApartment();
         apt.setNumber_of_remaining(apt.getNumber_of_remaining() - 1);
         apartmentRepository.save(apt);
     }
+
+    public void ownerApproveContract(Integer contractId,Integer ownerId) {
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract==null){
+            throw new ApiException("Contract not found.");
+        }
+        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
+
+            throw new ApiException("Owner not found");
+        }
+
+        Apartment apartment = contract.getApartment();
+
+        int currentRentersCount = contract.getRenters().size();
+        int requiredRentersCount = apartment.getMax_renter();
+
+        if (currentRentersCount < requiredRentersCount) {
+            throw new ApiException("Only " + currentRentersCount + " renters accepted. Required: " + requiredRentersCount);
+        }
+
+        contract.setOwnerApproved(true);
+        contractRepository.save(contract);
+    }
+
 }

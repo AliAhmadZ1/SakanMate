@@ -38,12 +38,11 @@ public class Contract {
     private LocalDateTime endDate;
 
     private Boolean isRenewed = false;
-    private Boolean adminApproved = false;
+    private Boolean ownerApproved = false;
+    private Boolean renterAccepted = false;
 
-    @OneToOne
-    @MapsId
-    @JsonIgnore
-    private Renter renter;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
+    private Set<Renter> renters;
 
     @OneToOne
     @MapsId
