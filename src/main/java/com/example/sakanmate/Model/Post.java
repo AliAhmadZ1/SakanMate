@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -29,12 +31,15 @@ public class Post {
     private Integer id;
     @Pattern(regexp = "approved|pending|canceled|rented")
     private String status;
-
-    private LocalDate postDate;
+    @Column(columnDefinition = "datetime")
+    private LocalDateTime postDate;
     @Column(columnDefinition = "int")
     private Integer numberOfApprovedRequests;
+    @Column(columnDefinition = "bool")
     private boolean approved=false;
+    @Column(columnDefinition = "datetime")
     private LocalDateTime ApprovedDate;
+    @Column(columnDefinition = "int")
     private String rejectionReason;
 
 
