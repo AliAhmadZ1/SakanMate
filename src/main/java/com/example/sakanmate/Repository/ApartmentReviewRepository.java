@@ -11,4 +11,7 @@ public interface ApartmentReviewRepository extends JpaRepository<ApartmentReview
     ApartmentReview findApartmentReviewById(Integer id);
     List<ApartmentReview> findApartmentReviewByApartmentId(Integer apartmentId);
 
+    ApartmentReview deleteApartmentReviewsById(Integer id);
+
+
 }

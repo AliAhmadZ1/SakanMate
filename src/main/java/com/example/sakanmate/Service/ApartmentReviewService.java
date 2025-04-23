@@ -2,8 +2,10 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ApartmentReviewDTO;
+import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.ApartmentReview;
 import com.example.sakanmate.Model.Renter;
+import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ApartmentReviewRepository;
 import com.example.sakanmate.Repository.RenterRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ public class ApartmentReviewService {
     private final RenterRepository renterRepository;
     private final ApartmentReviewRepository apartmentReviewRepository;
     private ApartmentReviewRepository repo;
+    private AdminRepository adminRepository;
 
     public List<ApartmentReview> getByApartment() {
         return repo.findAll();
@@ -27,7 +30,7 @@ public class ApartmentReviewService {
     public void addReview(ApartmentReviewDTO dto) {
         ApartmentReview review = new ApartmentReview();
         review.setRating(dto.getRating());
-        review.setDescription(dto.getDescription());
+        review.setComment(dto.getDescription());
         repo.save(review);
     }
 
@@ -38,7 +41,7 @@ public class ApartmentReviewService {
         }
 
         review.setRating(dto.getRating());
-        review.setDescription(dto.getDescription());
+        review.setComment(dto.getDescription());
 
         repo.save(review);
     }
@@ -69,5 +72,20 @@ public class ApartmentReviewService {
             throw new ApiException("apartment review not found");
         apartmentReview.setDown_vote(apartmentReview.getDown_vote() + 1);
         apartmentReviewRepository.save(apartmentReview);
+    }
+
+
+    public void deleteReviewById(Integer reviewId, Integer adminId) {
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin==null){
+            throw new ApiException("Admin not found");
+        }
+
+        ApartmentReview review = repo.findApartmentReviewById(reviewId);
+        if (review==null){
+            throw new ApiException("Review not found");
+        }
+
+        repo.delete(review);
     }
 }

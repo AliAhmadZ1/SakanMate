@@ -50,4 +50,12 @@ public class ApartmentReviewController {
         apartmentReviewService.downVoteReview(renter_id, review_id);
         return ResponseEntity.status(200).body(new ApiResponse("down vote review"));
     }
+    @DeleteMapping("/reviews/{id}/{adminId}")
+    public ResponseEntity<String> deleteReviewByAdmin(
+            @PathVariable Integer id,
+            @PathVariable Integer adminId) {
+
+        apartmentReviewService.deleteReviewById(id, adminId);
+        return ResponseEntity.ok("Review deleted by admin ID: " + adminId);
+    }
 }

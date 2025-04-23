@@ -27,7 +27,7 @@ public class ApartmentReview {
     @Max(5)
     private Integer rating;
 
-    private String description;
+    private String comment;
 
     private int up_vote;
     private int down_vote;
