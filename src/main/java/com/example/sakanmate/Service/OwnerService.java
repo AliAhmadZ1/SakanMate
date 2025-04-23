@@ -1,17 +1,13 @@
 package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
-import com.example.sakanmate.Model.Admin;
-import com.example.sakanmate.Model.Owner;
-import com.example.sakanmate.Model.Post;
-import com.example.sakanmate.Model.Request;
-import com.example.sakanmate.Repository.AdminRepository;
-import com.example.sakanmate.Repository.OwnerRepository;
-import com.example.sakanmate.Repository.PostRepository;
-import com.example.sakanmate.Repository.RequestRepository;
+import com.example.sakanmate.DTO_In.PostDTO;
+import com.example.sakanmate.Model.*;
+import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -22,6 +18,7 @@ public class OwnerService {
     private final RequestRepository requestRepository;
     private final PostRepository postRepository;
     private final AdminRepository adminRepository;
+    private final ApartmentRepository apartmentRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -78,6 +75,34 @@ public class OwnerService {
         owner.setApproved(false);
         owner.setRejectionReason(reason);
         ownerRepository.save(owner);
+    }
+
+    //ali
+    // add apartment by owner
+    public void addApartment(Integer id, Apartment apartment){
+        Owner owner = ownerRepository.findOwnerById(id);
+        if (owner==null)
+            throw new ApiException("owner not found");
+        apartment.setOwner(owner);
+        owner.getApartment().add(apartment);
+        ownerRepository.save(owner);
+        apartmentRepository.save(apartment);
+    }
+
+    //ali
+    public void createPost(Integer id, Integer apartment_id){
+        Owner owner = ownerRepository.findOwnerById(id);
+        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
+        if (owner==null)
+            throw new ApiException("owner not found");
+        if (apartment==null)
+            throw new ApiException("apartment not found");
+        Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
+        owner.getPosts().add(post);
+        apartment.setPost(post);
+        postRepository.save(post);
+        ownerRepository.save(owner);
+        apartmentRepository.save(apartment);
     }
 
 
