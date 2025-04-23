@@ -73,6 +73,8 @@ public class PostController {
         return ResponseEntity.status(200).body(new ApiResponse("new post created"));
     }
 
+    // Endpoint 31
+    //ali
     @GetMapping("/get-new-posts")
     public ResponseEntity<List<Post>> getNewPosts(){
         return ResponseEntity.status(HttpStatus.OK).body(postService.getNewPosts());
