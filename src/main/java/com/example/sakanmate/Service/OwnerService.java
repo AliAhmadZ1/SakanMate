@@ -51,8 +51,6 @@ public class OwnerService {
     }
 
 
-
-    public void approveOwner(Integer ownerId) {
     public void approveOwner(Integer ownerId,Integer adminId) {
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin == null) {

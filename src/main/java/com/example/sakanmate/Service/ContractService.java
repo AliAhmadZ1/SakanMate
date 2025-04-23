@@ -139,7 +139,6 @@ public class ContractService {
         newContract.setEndDate(LocalDateTime.now().plusMonths(monthsToExtend));
         newContract.setTotalPrice(oldContract.getTotalPrice() * monthsToExtend);
         newContract.setIsRenewed(true);
-        newContract.setAdminApproved(false);
         newContract.setRenters(oldContract.getRenters());
         newContract.setOwnerApproved(false);
         newContract.setRenters(oldContract.getRenters());
@@ -214,7 +213,7 @@ public class ContractService {
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
         Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
-                LocalDateTime.now().plusMonths(request.getMonths()), false, false, null, request.getPost().getApartment(), request.getPost().getOwner());
+                LocalDateTime.now().plusMonths(request.getMonths()), false,false,false, null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
         contractRepository.save(contract);
@@ -233,7 +232,7 @@ public class ContractService {
         Apartment apartment = contract.getApartment();
 
         int currentRentersCount = contract.getRenters().size();
-        int requiredRentersCount = apartment.getMax_renter();
+        int requiredRentersCount = apartment.getMax_renters();
 
         if (currentRentersCount < requiredRentersCount) {
             throw new ApiException("Only " + currentRentersCount + " renters accepted. Required: " + requiredRentersCount);

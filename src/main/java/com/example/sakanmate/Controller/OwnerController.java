@@ -42,10 +42,6 @@ public class OwnerController {
     }
 
 
-
-    @PutMapping("/owners/{id}/approve")
-    public ResponseEntity<String> approveOwner(@PathVariable Integer id) {
-        ownerService.approveOwner(id);
     @PutMapping("/owners/{id}/approve/{adminId}")
     public ResponseEntity<String> approveOwner(@PathVariable Integer id,@PathVariable Integer adminId) {
         ownerService.approveOwner(id,adminId);

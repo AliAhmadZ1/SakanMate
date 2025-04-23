@@ -27,7 +27,6 @@ public class PostService {
     private final ApartmentRepository apartmentRepository;
     private final OwnerRepository ownerRepository;
     private final AdminRepository adminRepository;
-    private final OwnerRepository ownerRepository;
 
     public List<Post> getAll(){
         return postRepository.findAll();
