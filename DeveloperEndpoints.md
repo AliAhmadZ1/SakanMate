@@ -1,0 +1,38 @@
+# Team Contributions
+
+## Ayman's Endpoints
+1. `requestApartment` - Creates rental request
+2. `checkRequestStatus` - Checks request status
+3. `cancelRequest` - Cancels rental request
+4. `acceptRequest` - Accepts rental request (Owner)
+5. `rejectRequest` - Rejects rental request (Owner)
+6. `getOwnerPendingRequests` - Lists pending requests
+7. `createContract` - Generates new contract
+8. `acceptContract` - Renter accepts contract
+9. `getContractAsPdf` - Exports contract as PDF
+10. `assignComplaintToAdmin` - Assigns complaint to admin
+11. `fileComplaint` - Files new complaint
+
+## Khadija's Endpoints
+1. `approveAndPublish` - Approves and publishes post
+2. `approveApartment` - Approves apartment listing
+3. `approveOwner` - Approves owner registration
+4. `cancelPost` - Cancels property post
+5. `rejectPostByAdmin` - Rejects post with reason
+6. `rejectOwnerByAdmin` - Rejects owner registration
+7. `ApproveContract` - Approves contract (Owner)
+8. `isContractExpired` - Checks contract expiration
+9. `requestRenewal` - Requests contract renewal
+10. `aproveRenewedContract` - Approves renewed contract
+11. `deleteReviewByAdmin` - Removes review (Admin)
+12. `rejectApartment` - Rejects apartment with reason
+
+## Ali's Endpoints
+1. `assignComplaintToAdmin` - Assigns complaint to admin
+2. `fileComplaint` - Files new complaint
+3. `makeReview` - Creates apartment review
+4. `createPost` - Creates property listing
+5. `addApartmentToSakanMate` - Adds new apartment
+6. `disableOwner` - Deactivates owner account
+7. `upVoteReview` - Upvotes a review
+8. `downVoteReview` - Downvotes a review
