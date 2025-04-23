@@ -1,8 +1,11 @@
 package com.example.sakanmate.Service;
 
+import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ApartmentReviewDTO;
 import com.example.sakanmate.Model.ApartmentReview;
+import com.example.sakanmate.Model.Renter;
 import com.example.sakanmate.Repository.ApartmentReviewRepository;
+import com.example.sakanmate.Repository.RenterRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,8 @@ import java.util.List;
 public class ApartmentReviewService {
 
 
+    private final RenterRepository renterRepository;
+    private final ApartmentReviewRepository apartmentReviewRepository;
     private ApartmentReviewRepository repo;
 
     public List<ApartmentReview> getByApartment() {
@@ -39,5 +44,20 @@ public class ApartmentReviewService {
 
     public void deleteReview(Integer id) {
         repo.deleteById(id);
+    }
+
+    //ali
+    public void voteReview(Integer renter_id, Integer review_id, boolean vote){
+        Renter renter = renterRepository.findRenterById(renter_id);
+        ApartmentReview apartmentReview = apartmentReviewRepository.findApartmentReviewById(review_id);
+        if (renter==null)
+            throw new ApiException("renter not found");
+        if (apartmentReview==null)
+            throw new ApiException("apartment review not found");
+        if (vote)
+            apartmentReview.setUp_vote(apartmentReview.getUp_vote()+1);
+        else
+            apartmentReview.setDown_vote(apartmentReview.getDown_vote()+1);
+
     }
 }
