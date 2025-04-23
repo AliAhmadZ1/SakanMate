@@ -57,21 +57,6 @@ public class OwnerController {
     }
 
     //ali
-    @PostMapping("/add-apartment/{id}")
-    public ResponseEntity addApartment(@PathVariable Integer id, @RequestBody@Valid Apartment apartment){
-        ownerService.addApartment(id, apartment);
-        return ResponseEntity.status(200).body(new ApiResponse("new Apartment added"));
-
-    }
-
-    //ali
-    @PostMapping("create-post/{id}/apartment/{apartment_id}")
-    public ResponseEntity createPost(@PathVariable Integer id, @PathVariable Integer apartment_id){
-        ownerService.createPost(id, apartment_id);
-        return ResponseEntity.status(200).body(new ApiResponse("new post created"));
-    }
-
-    //ali
     @PutMapping("/disable-owner/admin/{admin_id}/owner/{owner_id}")
     public ResponseEntity disableOwner(@PathVariable Integer admin_id, @PathVariable Integer owner_id){
         ownerService.disableOwner(admin_id, owner_id);

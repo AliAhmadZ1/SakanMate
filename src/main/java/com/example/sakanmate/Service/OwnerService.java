@@ -90,34 +90,6 @@ public class OwnerService {
     }
 
     //ali
-    // add apartment by owner
-    public void addApartment(Integer id, Apartment apartment){
-        Owner owner = ownerRepository.findOwnerById(id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        apartment.setOwner(owner);
-        owner.getApartment().add(apartment);
-        ownerRepository.save(owner);
-        apartmentRepository.save(apartment);
-    }
-
-    //ali
-    public void createPost(Integer id, Integer apartment_id){
-        Owner owner = ownerRepository.findOwnerById(id);
-        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
-        if (owner==null)
-            throw new ApiException("owner not found");
-        if (apartment==null)
-            throw new ApiException("apartment not found");
-        Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
-        owner.getPosts().add(post);
-        apartment.setPost(post);
-        postRepository.save(post);
-        ownerRepository.save(owner);
-        apartmentRepository.save(apartment);
-    }
-
-    //ali
     // disable owner depend on average of rating and number of apartments
     public void disableOwner(Integer admin_id, Integer owner_id){
         Admin admin = adminRepository.findAdminsById(admin_id);
