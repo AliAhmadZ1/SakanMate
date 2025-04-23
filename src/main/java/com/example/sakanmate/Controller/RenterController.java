@@ -42,14 +42,14 @@ public class RenterController {
     }
 
     // Endpoint 23
-    //Ali ALshehri
+    //ali
     @PostMapping("/make-review/{id}/apartment/{apartment_id}")
     public ResponseEntity makeReview(@PathVariable Integer id, @PathVariable Integer apartment_id, @RequestBody@Valid ApartmentReview apartmentReview){
         renterService.makeReview(id, apartment_id, apartmentReview);
         return ResponseEntity.status(200).body(new ApiResponse("apartment review sent"));
     }
 
-
+    // Endpoint 34
     //khadija
     @GetMapping("/search-by-gender/{gender}")
     public ResponseEntity<List<Renter>> searchByGender(@PathVariable String gender) {
