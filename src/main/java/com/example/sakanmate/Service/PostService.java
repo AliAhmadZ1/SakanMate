@@ -31,8 +31,10 @@ public class PostService {
         if (apartment==null)
             throw new ApiException("apartment not found");
         Owner owner = ownerRepository.findOwnerById(apartment.getOwner().getId());
+        if (owner==null)
+            throw new ApiException("owner don't found");
         postDTO.setPostDate(LocalDate.now());
-        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),null,apartment,owner,null);
+        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,null,apartment,owner,null);
         postRepository.save(post);
     }
 
