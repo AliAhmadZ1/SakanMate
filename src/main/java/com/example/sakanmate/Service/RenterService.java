@@ -70,7 +70,7 @@ public class RenterService {
         }
 
         // Check the months
-        if(months < 1) throw new ApiException("The months need to greater than 1.");
+        if (months < 1) throw new ApiException("The months need to greater than 1.");
 
         // Make the request (make the request object) and mark the request status as pending.
         Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
@@ -92,12 +92,12 @@ public class RenterService {
         if (request == null) throw new ApiException("Request not found.");
 
         // Check if the request was made by the renter.
-        if(request.getRenter() != renter) throw new ApiException("Request and renter do not match.");
+        if (request.getRenter() != renter) throw new ApiException("Request and renter do not match.");
         return request.getState();
     }
 
     // 3-
-    public void cancelRequest(Integer renterId, Integer requestId){
+    public void cancelRequest(Integer renterId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
@@ -111,22 +111,9 @@ public class RenterService {
         requestRepository.save(request);
     }
 
-    public void acceptContract(Integer renterId, Integer contractId){
-        // Check if the renter exists in the database.
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter == null) throw new ApiException("Renter not found.");
 
-        // Check if the contract exists in the database.
-        Contract contract = contractRepository.findContractById(contractId);
-        if (contract == null) throw new ApiException("Contract not found.");
 
-        // Check if the contract belong to the renter ************8
-
-        // Add the renter to the contract renters * renter accepting the contract.
-        contract.getRenters().add(renter);
-    }
-
-    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description){
+    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
@@ -136,7 +123,8 @@ public class RenterService {
         if (apartment == null) throw new ApiException("Apartment not found.");
 
         // Check if the apartment does not belong to the renter
-        if(!apartment.getContract().getRenters().contains(renter)) throw new ApiException("The apartment does not belong to the renter.");
+        if (!apartment.getContract().getRenters().contains(renter))
+            throw new ApiException("The apartment does not belong to the renter.");
 
         // Make the complaint
         Complaint complaint = new Complaint(null, title, description, null, renter, apartment);

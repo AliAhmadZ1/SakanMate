@@ -51,4 +51,10 @@ public class ContractController {
                 .contentType(MediaType.APPLICATION_PDF) // Sets MIME type
                 .body(pdfBytes);
     }
+
+    @PutMapping("/accept-contract/{renterId}/{contractId}/{requestId}")
+    public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId, @PathVariable Integer requestId){
+        contractService.acceptContract(renterId, contractId, requestId);
+        return ResponseEntity.status(200).body(new ApiResponse("Contract accepted successfully."));
+    }
 }

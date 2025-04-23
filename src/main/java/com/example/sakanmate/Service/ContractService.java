@@ -4,7 +4,10 @@ import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ContractDtoOut;
 import com.example.sakanmate.Model.Contract;
 import com.example.sakanmate.Model.Renter;
+import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.ContractRepository;
+import com.example.sakanmate.Repository.RenterRepository;
+import com.example.sakanmate.Repository.RequestRepository;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
@@ -21,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContractService {
     private final ContractRepository contractRepository;
+    private final RenterRepository renterRepository;
+    private final RequestRepository requestRepository;
 
     public List<ContractDtoOut> getAllContracts() {
         List<Contract> contracts = contractRepository.findAll();
@@ -98,5 +103,24 @@ public class ContractService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate PDF", e);
         }
+    }
+
+    public void acceptContract(Integer renterId, Integer contractId, Integer requestId) {
+        // Check if the renter exists in the database.
+        Renter renter = renterRepository.findRenterById(renterId);
+        if (renter == null) throw new ApiException("Renter not found.");
+
+        // Check if the contract exists in the database.
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract == null) throw new ApiException("Contract not found.");
+
+        // Check if the contract belong to the renter
+        Request request = requestRepository.findRequestById(requestId);
+        if (request.getRenter() != renter) throw new ApiException("The Contract does not belong to the renter.");
+
+        // Add the renter to the contract renters * renter accepting the contract.
+        contract.getRenters().add(renter);
+        // Save the contract.
+        contractRepository.save(contract);
     }
 }
