@@ -36,7 +36,7 @@ public class RequestService {
 
     }
 
-    //1-
+    // Ayman
     // This is where the request get asked by the user given the post id and the renter id
     public void requestApartment(Integer renterId, Integer postId, int months) {
         // Check if the renter exists in the database.
@@ -66,7 +66,8 @@ public class RequestService {
         renterRepository.save(renter);
     }
 
-    // 2-
+    // Ayman
+    // Called by the renter to check the status of a request.
     public String checkRequestStatus(Integer renterId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -81,7 +82,8 @@ public class RequestService {
         return request.getState();
     }
 
-    // 3-
+    // Ayman
+    // Called by the renter to cancel a request.
     public void cancelRequest(Integer renterId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -96,6 +98,8 @@ public class RequestService {
         requestRepository.save(request);
     }
 
+    // Ayman
+    // Called by the owner to accept a request by a renter.
     public void acceptRequest(Integer ownerId, Integer requestId) {
         // Get the owner and the request objects
         Owner owner = ownerRepository.findOwnerById(ownerId);
@@ -139,6 +143,8 @@ public class RequestService {
         // Send a notification.
     }
 
+    // Ayman
+    // Called by the owner to reject a request.
     public void rejectRequest(Integer ownerId, Integer requestId) {
         // Get the owner and the request objects
         Owner owner = ownerRepository.findOwnerById(ownerId);
@@ -168,6 +174,8 @@ public class RequestService {
     }
 
 
+    // Ayman
+    // Called by the owner to be able to see the pending requests.
     public List<Request> getOwnerPendingRequests(Integer ownerId) {
         // Get the owner and check if the owner in the database.
         Owner owner = ownerRepository.findOwnerById(ownerId);
