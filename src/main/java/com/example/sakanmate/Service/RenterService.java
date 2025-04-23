@@ -6,23 +6,24 @@ import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 @Service
 @RequiredArgsConstructor
 public class RenterService {
+
     private final RenterRepository renterRepository;
     private final PostRepository postRepository;
     private final RequestRepository requestRepository;
     private final ContractRepository contractRepository;
     private final ApartmentRepository apartmentRepository;
+    private final ApartmentReviewRepository apartmentReviewRepository;
     private final OwnerRepository ownerRepository;
     private final JavaMailSender javaMailSender;
 
@@ -60,4 +61,23 @@ public class RenterService {
         if (renter == null) throw new ApiException("Renter not found.");
         renterRepository.delete(renter);
     }
+
+    //Ali Alshehri
+    // makeReview endpoint
+    public void makeReview(Integer id, Integer apartment_id, ApartmentReview apartmentReview){
+        Renter renter = renterRepository.findRenterById(id);
+        Apartment apartment = apartmentRepository.findApartmentById(apartment_id);
+        if (renter==null)
+            throw new ApiException("renter not found");
+        if (apartment==null)
+            throw new ApiException("apartment not found");
+
+        apartmentReview.setRenter(renter);
+        apartmentReview.setApartment(apartment);
+        apartmentReviewRepository.save(apartmentReview);
+    }
+
+
+
+
 }

@@ -19,14 +19,20 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 import com.example.sakanmate.Repository.RenterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +42,9 @@ public class ContractService {
     private final RenterRepository renterRepository;
     private final RequestRepository requestRepository;
     private final AdminRepository adminRepository;
+    private final JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
     public List<ContractDtoOut> getAllContracts() {
         List<Contract> contracts = contractRepository.findAll();
@@ -49,30 +58,32 @@ public class ContractService {
         return contractDtoOuts;
     }
 
-    public void updateContract(Integer contractId, Contract contract){
+    public void updateContract(Integer contractId, Contract contract) {
         Contract tempContractObject = contractRepository.findContractById(contractId);
-        if(tempContractObject == null) throw new ApiException("Contract not found.");
+        if (tempContractObject == null) throw new ApiException("Contract not found.");
         tempContractObject.setEndDate(contract.getEndDate());
         tempContractObject.setStartDate(contract.getStartDate());
         tempContractObject.setTotalPrice(contract.getTotalPrice());
         contractRepository.save(tempContractObject);
     }
 
-    public void deleteContract(Integer contractId){
+    public void deleteContract(Integer contractId) {
         Contract contract = contractRepository.findContractById(contractId);
-        if(contract == null) throw new ApiException("Contract not found.");
+        if (contract == null) throw new ApiException("Contract not found.");
         contractRepository.delete(contract);
     }
 
-    public byte[] getContractAsPdf(Integer contractId){
+    // Ayman
+    public byte[] getContractAsPdf(Integer contractId) {
         Contract contract = contractRepository.findContractById(contractId);
-        if(contract == null) throw new ApiException("Contract not found.");
+        if (contract == null) throw new ApiException("Contract not found.");
         //***Check contract status.
         return createPlainTextPdf(contract);
 
     }
 
-    //This method was taking from Bealdung and customized to the contract.
+    // Ayman
+    // This method was taking from Bealdung and customized to the contract.
     private byte[] createPlainTextPdf(Contract contract) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -88,7 +99,7 @@ public class ContractService {
             document.add(Chunk.NEWLINE); // Blank line
             // Format the renters
             StringBuilder renters = new StringBuilder("");
-            for(Renter renter : contract.getRenters()){
+            for (Renter renter : contract.getRenters()) {
                 renters.append("Name: " + renter.getName() + "\nEmail: " + renter.getEmail() + "\n---------\n");
             }
             // Format the pdf
@@ -110,7 +121,6 @@ public class ContractService {
             throw new RuntimeException("Failed to generate PDF", e);
         }
     }
-
 
 
     public boolean isContractExpired(Integer contractId) {
@@ -146,7 +156,7 @@ public class ContractService {
         return contractRepository.save(newContract);
     }
 
-    public void approveRenewedContract(Integer contractId,Integer ownerId) {
+    public void approveRenewedContract(Integer contractId, Integer ownerId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
             throw new ApiException("Contract not found");
@@ -168,6 +178,8 @@ public class ContractService {
         apartmentRepository.save(apt);
     }
 
+    //Ayman
+    // Called by the renter to accept a contract.
     public void acceptContract(Integer renterId, Integer contractId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -181,12 +193,19 @@ public class ContractService {
         Request request = requestRepository.findRequestById(requestId);
         if (request.getRenter() != renter) throw new ApiException("The Contract does not belong to the renter.");
 
+        // Check if the renter accepted the contract
+        if (contract.getRenters().contains(renter)) throw new ApiException("Renter already accepted the contract.");
+
+        // Add the contract to the renter
+        renter.setContract(contract);
+        renterRepository.save(renter);
         // Add the renter to the contract renters * renter accepting the contract.
         contract.getRenters().add(renter);
         // Save the contract.
         contractRepository.save(contract);
     }
 
+    //Ayman
     // Admins only can make the contracts, The contract are based on the request,
     // when a request get approved by an owner the admin can create the contract.
     // Maybe we can add an endpoint for the owner where he can send a notification to an admin to create the contract
@@ -212,21 +231,24 @@ public class ContractService {
 
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
-        Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
-                LocalDateTime.now().plusMonths(request.getMonths()), false,false,false, null, request.getPost().getApartment(), request.getPost().getOwner());
+        Contract contract = new Contract(null, totalPrice, LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusMonths(request.getMonths()), false, false, false, null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
         contractRepository.save(contract);
     }
 
-    public void ownerApproveContract(Integer contractId,Integer ownerId) {
+    public void ownerApproveContract(Integer contractId, Integer ownerId) {
         Contract contract = contractRepository.findContractById(contractId);
-        if (contract==null){
+        if (contract == null) {
             throw new ApiException("Contract not found.");
         }
-        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
+        if (contract.getOwner() == null) {
 
             throw new ApiException("Owner not found");
+        }
+        if (!contract.getOwner().getId().equals(ownerId)) {
+            throw new ApiException("Contract does not belong to the owner");
         }
 
         Apartment apartment = contract.getApartment();
@@ -240,6 +262,19 @@ public class ContractService {
 
         contract.setOwnerApproved(true);
         contractRepository.save(contract);
+        sendEmailToRentersWhenContractComplete(contract.getRenters());
+    }
+
+    public void sendEmailToRentersWhenContractComplete(Set<Renter> renters) {
+        for (Renter renter : renters) {
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(senderEmail);
+            simpleMailMessage.setTo(renter.getEmail());
+            simpleMailMessage.setText("Hello " + renter.getName() + "\nYour contract have been approved by the owner");
+            simpleMailMessage.setSubject("Contract new update");
+            simpleMailMessage.setSentDate(Date.from(Instant.now()));
+            javaMailSender.send(simpleMailMessage);
+        }
     }
 
 }

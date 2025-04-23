@@ -23,20 +23,7 @@ public class RequestService {
     private final PostRepository postRepository;
     private final OwnerRepository ownerRepository;
 
-    public void update(){
-
-    }
-
-    public List<Request> getAll(){
-        return requestRepository.findAll();
-    }
-
-
-    public void delete(){
-
-    }
-
-    //1-
+    // Ayman
     // This is where the request get asked by the user given the post id and the renter id
     public void requestApartment(Integer renterId, Integer postId, int months) {
         // Check if the renter exists in the database.
@@ -59,14 +46,19 @@ public class RequestService {
 
         // Make the request (make the request object) and mark the request status as pending.
         Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
-        renter.getRequests().add(request);
-
-        // Save the objects in the database.
+        // Add the post to the request.
+        request.setPost(post);
+        // Add the renter to the request.
+        request.setRenter(renter);
+        // Save the request in the database.
         requestRepository.save(request);
+        post.getRequest().add(request);
+        renter.getRequests().add(request);
         renterRepository.save(renter);
     }
 
-    // 2-
+    // Ayman
+    // Called by the renter to check the status of a request.
     public String checkRequestStatus(Integer renterId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -81,7 +73,8 @@ public class RequestService {
         return request.getState();
     }
 
-    // 3-
+    // Ayman
+    // Called by the renter to cancel a request.
     public void cancelRequest(Integer renterId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -96,6 +89,8 @@ public class RequestService {
         requestRepository.save(request);
     }
 
+    // Ayman
+    // Called by the owner to accept a request by a renter.
     public void acceptRequest(Integer ownerId, Integer requestId) {
         // Get the owner and the request objects
         Owner owner = ownerRepository.findOwnerById(ownerId);
@@ -139,6 +134,8 @@ public class RequestService {
         // Send a notification.
     }
 
+    // Ayman
+    // Called by the owner to reject a request.
     public void rejectRequest(Integer ownerId, Integer requestId) {
         // Get the owner and the request objects
         Owner owner = ownerRepository.findOwnerById(ownerId);
@@ -168,6 +165,8 @@ public class RequestService {
     }
 
 
+    // Ayman
+    // Called by the owner to be able to see the pending requests.
     public List<Request> getOwnerPendingRequests(Integer ownerId) {
         // Get the owner and check if the owner in the database.
         Owner owner = ownerRepository.findOwnerById(ownerId);

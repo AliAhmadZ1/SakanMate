@@ -1,6 +1,7 @@
 package com.example.sakanmate.Controller;
 
 import com.example.sakanmate.Api.ApiResponse;
+import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Service.OwnerService;
@@ -41,6 +42,7 @@ public class OwnerController {
         return ResponseEntity.status(200).body(new ApiResponse("owner deleted"));
     }
 
+    // Endpoint 16
     //khadija
     @PutMapping("/owners/{id}/approve/{adminId}")
     public ResponseEntity<String> approveOwner(@PathVariable Integer id,@PathVariable Integer adminId) {
@@ -48,6 +50,7 @@ public class OwnerController {
         return ResponseEntity.ok("Owner approved.");
     }
 
+    // Endpoint 17
     //khadija
     @PutMapping("/reject-by-admin/{id}/{adminId}")
     public ResponseEntity<String> rejectOwnerByAdmin(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
@@ -55,6 +58,13 @@ public class OwnerController {
         return ResponseEntity.ok("Owner rejected based on license.");
     }
 
+    // Endpoint 18
+    //ali
+    @PutMapping("/disable-owner/admin/{admin_id}/owner/{owner_id}")
+    public ResponseEntity disableOwner(@PathVariable Integer admin_id, @PathVariable Integer owner_id){
+        ownerService.disableOwner(admin_id, owner_id);
+        return ResponseEntity.status(200).body(new ApiResponse("Owner disabled"));
+    }
 
 
 }

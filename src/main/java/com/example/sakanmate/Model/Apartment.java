@@ -29,7 +29,7 @@ public class Apartment {
 
     private Integer max_renters;
 
-    private Boolean availability;
+    private Boolean availability = false;
 
     private String document_number;
     @Positive
@@ -42,19 +42,18 @@ public class Apartment {
     private String rejectionReason;
 
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
-    @PrimaryKeyJoinColumn
-    private Post post;
+    @OneToMany(mappedBy = "apartment")
+    @JsonIgnore
+    private Set<Post> posts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
     private Set<ApartmentReview> apartmentReviews;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
-    @PrimaryKeyJoinColumn
-    private Contract contract;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "apartment")
+    private Set<Contract> contracts;
 
     @ManyToOne
-    @JoinColumn(name = "apartment_id" , referencedColumnName = "id")
+    @JoinColumn(name = "owner_id" , referencedColumnName = "id")
     @JsonIgnore
     private Owner owner;
 

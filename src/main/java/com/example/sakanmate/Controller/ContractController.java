@@ -37,6 +37,8 @@ public class ContractController {
         return ResponseEntity.status(200).body(new ApiResponse("Contract deleted successfully."));
     }
 
+    // Endpoint 9
+    //ayman
     @GetMapping("/get-contract-as-pdf/{contractId}")
     public ResponseEntity<byte[]> getContractAsPdf(@PathVariable Integer contractId) {
         byte[] pdfBytes = contractService.getContractAsPdf(contractId);
@@ -47,11 +49,14 @@ public class ContractController {
                 .body(pdfBytes);
     }
 
+    // Endpoint 10
     //khadija
     @GetMapping("/is-expired/{id}")
     public ResponseEntity<Boolean> isContractExpired(@PathVariable Integer id) {
         return ResponseEntity.ok(contractService.isContractExpired(id));
     }
+
+    // Endpoint 11
     //khadija
     @PostMapping("/{oldId}/renew")
     public ResponseEntity<Contract> requestRenewal(
@@ -60,24 +65,32 @@ public class ContractController {
         Contract newContract = contractService.requestRenewal(oldId, months);
         return ResponseEntity.ok(newContract);
     }
+
+    // Endpoint 12
     //khadija
-    @PutMapping("/{id}/{ownerId}approve-renewal")
-    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id,@PathVariable Integer ownerId) {
-        contractService.approveRenewedContract(id,ownerId);
+    @PutMapping("/{id}/{ownerId}/approve-renewal")
+    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id, @PathVariable Integer ownerId) {
+        contractService.approveRenewedContract(id, ownerId);
         return ResponseEntity.ok("Renewed contract approved by admin.");
     }
 
+    // Endpoint 13
+    //ayman
     @PutMapping("/accept-contract/{renterId}/{contractId}/{requestId}")
-    public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId, @PathVariable Integer requestId){
+    public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId, @PathVariable Integer requestId) {
         contractService.acceptContract(renterId, contractId, requestId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract accepted successfully."));
     }
 
+    // Endpoint 14
+    //ayman
     @PostMapping("/create-contract/{adminId}/{requestId}")
-    public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
+    public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId) {
         contractService.createContract(adminId, requestId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully"));
     }
+
+    // Endpoint 15
     //khadija
     @PutMapping("/approve-by-owner/{id}/{ownerId}")
     public ResponseEntity<String> approveContractByOwner(
@@ -87,4 +100,5 @@ public class ContractController {
         contractService.ownerApproveContract(id, ownerId);
         return ResponseEntity.ok("Contract approved by owner.");
     }
+
 }

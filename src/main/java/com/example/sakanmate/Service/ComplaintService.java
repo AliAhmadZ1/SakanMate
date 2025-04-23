@@ -41,6 +41,8 @@ public class ComplaintService {
         complaintRepository.deleteById(id);
     }
 
+    // Ayman
+    // Called by the user to file a complaint.
     public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -51,13 +53,15 @@ public class ComplaintService {
         if (apartment == null) throw new ApiException("Apartment not found.");
 
         // Check if the apartment does not belong to the renter
-        if (!apartment.getContract().getRenters().contains(renter))
-            throw new ApiException("The apartment does not belong to the renter.");
+//        if (!apartment.getContracts().getRenters().contains(renter))
+//            throw new ApiException("The apartment does not belong to the renter.");
 
         // Make the complaint
         Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
     }
 
+    // Ayman
+    // Called by the admin to link a complaint to an admin.
     public void assignComplaintToAdmin(Integer adminId, Integer complaintId) {
         // Get the admin and check if it's in the database.
         Admin admin = adminRepository.findAdminsById(adminId);
