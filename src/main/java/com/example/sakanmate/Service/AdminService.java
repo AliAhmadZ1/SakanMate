@@ -68,7 +68,7 @@ public class AdminService {
         Post post = request.getPost();
 
         // Calculate the total price.
-        double totalPrice = request.getPost().getApartment().getMonthlyPrice() * request.getMonths();
+        double totalPrice = post.getApartment().getMonthlyPrice() * request.getMonths();
 
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
@@ -79,18 +79,4 @@ public class AdminService {
         contractRepository.save(contract);
     }
 
-    public void assignComplaintToAdmin(Integer adminId, Integer complaintId) {
-        // Get the admin and check if it's in the database.
-        Admin admin = adminRepository.findAdminsById(adminId);
-        if (admin == null)
-            throw new ApiException("Admin not found."); // Get the admin and check if it's in the database.
-        Complaint complaint = complaintRepository.findComplaintById(complaintId);
-        if (complaint == null) throw new ApiException("Compliant not found.");
-
-        // Assign the complaint to the admin
-        complaint.setAdmin(admin);
-
-        // Save the complaint
-        complaintRepository.save(complaint);
-    }
 }

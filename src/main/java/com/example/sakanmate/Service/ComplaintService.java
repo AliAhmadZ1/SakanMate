@@ -2,9 +2,11 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ComplaintDTO;
+import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Complaint;
 import com.example.sakanmate.Model.Renter;
+import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ApartmentRepository;
 import com.example.sakanmate.Repository.ComplaintRepository;
 import com.example.sakanmate.Repository.RenterRepository;
@@ -19,7 +21,7 @@ public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final RenterRepository renterRepository;
     private final ApartmentRepository apartmentRepository;
-
+    private final AdminRepository adminRepository;
     public List<Complaint> getAll() {
         return complaintRepository.findAll();
     }
@@ -54,5 +56,20 @@ public class ComplaintService {
 
         // Make the complaint
         Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
+    }
+
+    public void assignComplaintToAdmin(Integer adminId, Integer complaintId) {
+        // Get the admin and check if it's in the database.
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null)
+            throw new ApiException("Admin not found."); // Get the admin and check if it's in the database.
+        Complaint complaint = complaintRepository.findComplaintById(complaintId);
+        if (complaint == null) throw new ApiException("Compliant not found.");
+
+        // Assign the complaint to the admin
+        complaint.setAdmin(admin);
+
+        // Save the complaint
+        complaintRepository.save(complaint);
     }
 }

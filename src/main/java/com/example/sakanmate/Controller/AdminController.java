@@ -43,11 +43,4 @@ public class AdminController {
         adminService.createContract(adminId, requestId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
     }
-
-    @PutMapping("/assign-complaint-to-admin/{adminId}/{complaintId}")
-    public ResponseEntity<ApiResponse> assignComplaintToAdmin(@PathVariable Integer adminId, @PathVariable Integer complaintId){
-        adminService.assignComplaintToAdmin(adminId, complaintId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Complaint assigned successfully/"));
-
-    }
 }
