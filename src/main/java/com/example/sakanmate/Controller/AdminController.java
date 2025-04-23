@@ -37,10 +37,4 @@ public class AdminController {
         adminService.deleteAdmin(id);
         return ResponseEntity.ok("Admin deleted.");
     }
-
-    @PostMapping("/create-contract/{adminId}/{requestId}")
-    public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
-        adminService.createContract(adminId, requestId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
-    }
 }

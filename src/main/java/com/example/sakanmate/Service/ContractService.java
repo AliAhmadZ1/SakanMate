@@ -2,9 +2,8 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.DtoOut.ContractDtoOut;
-import com.example.sakanmate.Model.Contract;
-import com.example.sakanmate.Model.Renter;
-import com.example.sakanmate.Model.Request;
+import com.example.sakanmate.Model.*;
+import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.ContractRepository;
 import com.example.sakanmate.Repository.RenterRepository;
 import com.example.sakanmate.Repository.RequestRepository;
@@ -17,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class ContractService {
     private final ContractRepository contractRepository;
     private final RenterRepository renterRepository;
     private final RequestRepository requestRepository;
+    private final AdminRepository adminRepository;
 
     public List<ContractDtoOut> getAllContracts() {
         List<Contract> contracts = contractRepository.findAll();
@@ -37,10 +38,6 @@ public class ContractService {
         }
 
         return contractDtoOuts;
-    }
-
-    public void addContract(Contract contract){
-        contractRepository.save(contract);
     }
 
     public void updateContract(Integer contractId, Contract contract){
@@ -121,6 +118,38 @@ public class ContractService {
         // Add the renter to the contract renters * renter accepting the contract.
         contract.getRenters().add(renter);
         // Save the contract.
+        contractRepository.save(contract);
+    }
+
+    // Admins only can make the contracts, The contract are based on the request,
+    // when a request get approved by an owner the admin can create the contract.
+    // Maybe we can add an endpoint for the owner where he can send a notification to an admin to create the contract
+    // * Assign the task of creating the contract to an admin
+    public void createContract(Integer adminId, Integer requestId) {
+        // Get the admin and check if it's in the database.
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null) throw new ApiException("Admin not found.");
+
+        // Get the request and validate it.
+        Request request = requestRepository.findRequestById(requestId);
+        if (request == null) throw new ApiException("Request not found.");
+        switch (request.getState()) {
+            case "pending" -> throw new ApiException("Can not create a contract to a pending request");
+            case "rejected" -> throw new ApiException("Can not create a contract to a rejected request.");
+            case "canceled" -> throw new ApiException("Can not create a contract to a canceled request");
+        }
+        // Get the post
+        Post post = request.getPost();
+
+        // Calculate the total price.
+        double totalPrice = post.getApartment().getMonthlyPrice() * request.getMonths();
+
+        // Create the contract.
+        // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
+        Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
+                LocalDateTime.now().plusMonths(request.getMonths()), null, request.getPost().getApartment(), request.getPost().getOwner());
+
+        // Save the contact in the database.
         contractRepository.save(contract);
     }
 }

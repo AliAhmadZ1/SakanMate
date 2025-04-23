@@ -7,6 +7,7 @@ import com.example.sakanmate.Service.ContractService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +23,6 @@ public class ContractController {
     @GetMapping("/get-all-contracts")
     public ResponseEntity<List<ContractDtoOut>> getAllContracts() {
         return ResponseEntity.status(200).body(contractService.getAllContracts());
-    }
-
-    @PostMapping("/add-contract")
-    public ResponseEntity<ApiResponse> addContract(@RequestBody @Valid Contract contract) {
-        contractService.addContract(contract);
-        return ResponseEntity.status(200).body(new ApiResponse("Contract added successfully."));
     }
 
     @PutMapping("/update-contract/{contractId}")
@@ -56,5 +51,11 @@ public class ContractController {
     public ResponseEntity<ApiResponse> acceptContract(@PathVariable Integer renterId, @PathVariable Integer contractId, @PathVariable Integer requestId){
         contractService.acceptContract(renterId, contractId, requestId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract accepted successfully."));
+    }
+
+    @PostMapping("/create-contract/{adminId}/{requestId}")
+    public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
+        contractService.createContract(adminId, requestId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
     }
 }
