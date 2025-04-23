@@ -74,7 +74,9 @@ public class OwnerService {
         if (owner==null){
             throw new ApiException("Owner not found");
         }
-
+        if (reason==null){
+            throw new ApiException(reason);
+        }
         owner.setApproved(false);
         owner.setRejectionReason(reason);
         ownerRepository.save(owner);

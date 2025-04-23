@@ -70,7 +70,9 @@ public class ApartmentService {
         if (apartment==null){
             throw new ApiException("Apartment not found");
         }
-
+if (reason==null){
+    throw new ApiException(reason);
+}
         apartment.setApproved(false);
         apartment.setRejectionReason(reason);
         apartmentRepository.save(apartment);

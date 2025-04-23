@@ -103,6 +103,9 @@ public class PostService {
         if (admin==null){
             throw new ApiException("Admin not found");
         }
+        if (reason==null){
+            throw new ApiException(reason);
+        }
 
         post.setApproved(false);
         post.setStatus("REJECTED");
