@@ -84,9 +84,11 @@ public class OwnerService {
         if (owner==null)
             throw new ApiException("owner not found");
         apartment.setOwner(owner);
-        owner.getApartment().add(apartment);
-        ownerRepository.save(owner);
+        apartment.setNumber_of_remaining(apartment.getMax_renters());
         apartmentRepository.save(apartment);
+        //owner.getApartments().add(apartment);
+        ownerRepository.save(owner);
+
     }
 
     //ali
@@ -98,9 +100,9 @@ public class OwnerService {
         if (apartment==null)
             throw new ApiException("apartment not found");
         Post post = new Post(null,"pending", LocalDate.now(),0,false,null,null,null,apartment,owner,null);
-        owner.getPosts().add(post);
-        apartment.setPost(post);
         postRepository.save(post);
+        //owner.getPosts().add(post);
+        apartment.getPosts().add(post);
         ownerRepository.save(owner);
         apartmentRepository.save(apartment);
     }

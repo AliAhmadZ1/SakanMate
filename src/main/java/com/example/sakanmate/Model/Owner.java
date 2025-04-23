@@ -25,6 +25,7 @@ public class Owner {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Apartment> apartments;  // Rename to plural for clarity
+
     private boolean isApproved = false;
 
     private String rejectionReason;

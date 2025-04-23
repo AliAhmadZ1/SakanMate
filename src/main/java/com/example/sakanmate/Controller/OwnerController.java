@@ -57,7 +57,7 @@ public class OwnerController {
 
     //ali
     @PostMapping("/add-apartment/{id}")
-    public ResponseEntity addApartment(@PathVariable Integer id, @RequestBody@Valid Apartment apartment){
+    public ResponseEntity addApartment(@PathVariable Integer id, @RequestBody Apartment apartment){
         ownerService.addApartment(id, apartment);
         return ResponseEntity.status(200).body(new ApiResponse("new Apartment added"));
 

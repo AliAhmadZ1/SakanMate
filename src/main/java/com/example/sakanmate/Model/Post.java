@@ -43,8 +43,7 @@ public class Post {
     @JsonIgnore
     private Admin admin;
 
-    @OneToOne
-    @MapsId
+    @ManyToOne
     @JsonIgnore
     private Apartment apartment;
 

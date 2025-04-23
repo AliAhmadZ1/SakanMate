@@ -53,8 +53,8 @@ public class ComplaintService {
         if (apartment == null) throw new ApiException("Apartment not found.");
 
         // Check if the apartment does not belong to the renter
-        if (!apartment.getContract().getRenters().contains(renter))
-            throw new ApiException("The apartment does not belong to the renter.");
+//        if (!apartment.getContracts().getRenters().contains(renter))
+//            throw new ApiException("The apartment does not belong to the renter.");
 
         // Make the complaint
         Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
