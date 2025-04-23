@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class OwnerService {
     private final PostRepository postRepository;
     private final AdminRepository adminRepository;
     private final ApartmentRepository apartmentRepository;
+    private final ApartmentReviewRepository apartmentReviewRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -108,7 +110,7 @@ public class OwnerService {
     }
 
     //ali
-    // disable owner depend on number of complaints and rating
+    // disable owner depend on average of rating and number of apartments
     public void disableOwner(Integer admin_id, Integer owner_id){
         Admin admin = adminRepository.findAdminsById(admin_id);
         Owner owner = ownerRepository.findOwnerById(owner_id);
@@ -118,8 +120,40 @@ public class OwnerService {
             throw new ApiException("owner not found");
         if (!owner.isApproved())
             throw new ApiException("owner is already disabled");
+        List<Apartment> apartments = apartmentRepository.findApartmentByOwnerId(owner_id);
+        if (apartments.isEmpty())
+            throw new ApiException("this owner doesn't have apartments");
+
+        // the condition to disable is average rating less than 2/5 and number of apartment greater than 5
+        double result = calculateAverageRatingByOwner(apartments);
+        if (result>2&&apartments.size()<5)
+            throw new ApiException("cannot disable this owner because of newly registered");
+
+        //when meet all conditions
         owner.setApproved(false);
         owner.setRejectionReason("This owner did not meet the requirements.");
         ownerRepository.save(owner);
     }
+
+    // helping method to calculate
+    public double calculateAverageRatingByOwner(List<Apartment> apartments){
+        double averageRating = 0.0;
+        double sumOfAverageRating = 0.0;
+        int sumOfRating = 0;
+        int counter=0;
+        int averageCounter=0;
+        for (Apartment a:apartments){
+            Set<ApartmentReview> apartmentReviews = a.getApartmentReviews();
+            for (ApartmentReview ar:apartmentReviews){
+                sumOfRating = sumOfRating + ar.getRating();
+                counter++;
+            }
+            averageRating = (double) sumOfRating / counter;
+            sumOfAverageRating = sumOfAverageRating + averageRating;
+            averageCounter++;
+        }
+        averageRating = sumOfAverageRating/averageCounter;
+        return averageRating;
+    }
+
 }
