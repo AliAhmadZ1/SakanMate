@@ -148,4 +148,8 @@ public class PostService {
         ownerRepository.save(owner);
         apartmentRepository.save(apartment);
     }
+
+    public List<Post> getNewPosts(){
+        return postRepository.findPostsByAvailability();
+    }
 }
