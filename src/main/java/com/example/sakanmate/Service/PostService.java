@@ -33,7 +33,7 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public void updatePost(Integer id, PostDTO postDTO) {
+
 //    public void addPost(PostDTO postDTO){
 //        Apartment apartment = apartmentRepository.findApartmentById(postDTO.getApartment_id());
 //        if (apartment==null)
