@@ -76,7 +76,4 @@ public class RenterService {
         apartmentReviewRepository.save(apartmentReview);
     }
 
-
-
-
 }

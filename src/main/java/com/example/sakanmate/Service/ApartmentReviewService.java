@@ -80,7 +80,6 @@ public class ApartmentReviewService {
         if (admin==null){
             throw new ApiException("Admin not found");
         }
-
         ApartmentReview review = repo.findApartmentReviewById(reviewId);
         if (review==null){
             throw new ApiException("Review not found");
