@@ -125,7 +125,7 @@ public class ContractService {
     public boolean isContractExpired(Integer contractId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
-            throw new RuntimeException("Contract not found");
+            throw new ApiException("Contract not found");
         }
 
         return LocalDateTime.now().isAfter(contract.getEndDate());
@@ -134,11 +134,11 @@ public class ContractService {
     public Contract requestRenewal(Integer oldContractId, int monthsToExtend) {
         Contract oldContract = contractRepository.findContractById(oldContractId);
         if (oldContract==null){
-            throw new RuntimeException("Old contract not found");
+            throw new ApiException("Old contract not found");
         }
 
         if (LocalDateTime.now().isBefore(oldContract.getEndDate())) {
-            throw new RuntimeException("Current contract is still active");
+            throw new ApiException("Current contract is still active");
         }
 
         Contract newContract = new Contract();
@@ -158,11 +158,11 @@ public class ContractService {
     public void approveRenewedContract(Integer contractId,Integer ownerId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
-            throw new RuntimeException("Contract not found");
+            throw new ApiException("Contract not found");
         }
 
         if (!contract.getIsRenewed()) {
-            throw new RuntimeException("This is not a renewal contract.");
+            throw new ApiException("This is not a renewal contract.");
         }
         if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
 

@@ -38,9 +38,17 @@ public class ApartmentController {
         return ResponseEntity.status(200).body(new ApiResponse("apartment deleted"));
     }
 
+    //khadija
     @PutMapping("/approve/{id}/{adminId}")
     public ResponseEntity<String> approveApartment(@PathVariable Integer id,@PathVariable Integer adminId) {
         apartmentService.approveApartment(id,adminId);
         return ResponseEntity.ok("Apartment approved.");
+    }
+
+    //khadija
+    @PutMapping("/reject-apartment/{id}/{adminId}")
+    public ResponseEntity<String> rejectApartment(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
+        apartmentService.rejectApartment(id, reason, adminId);
+        return ResponseEntity.ok("Apartment rejected.");
     }
 }

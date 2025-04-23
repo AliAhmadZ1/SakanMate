@@ -39,6 +39,8 @@ public class Apartment {
 
     private boolean isApproved = false;
 
+    private String rejectionReason;
+
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "apartment")
     @PrimaryKeyJoinColumn

@@ -21,11 +21,11 @@ public class PostController {
         return ResponseEntity.status(200).body(postService.getAll());
     }
 
-    @PostMapping("/add")
-    public ResponseEntity addPost(@RequestBody @Valid PostDTO postDTO){
-        postService.addPost(postDTO);
-        return ResponseEntity.status(200).body(new ApiResponse("post added"));
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity addPost(@RequestBody @Valid PostDTO postDTO){
+//        postService.addPost(postDTO);
+//        return ResponseEntity.status(200).body(new ApiResponse("post added"));
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity updatePost(@PathVariable Integer id, @RequestBody@Valid PostDTO postDTO){
@@ -39,18 +39,19 @@ public class PostController {
         return ResponseEntity.status(200).body(new ApiResponse("post deleted"));
     }
 
+    //khadija
     @PutMapping("/posts/{postId}/approve/{adminId}")
     public ResponseEntity<String> approvePost(@PathVariable Integer postId, @PathVariable Integer adminId) {
         postService.approveAndPublishPost(postId, adminId);
         return ResponseEntity.ok("Post approved by admin.");
     }
-
+    //khadija
     @PutMapping("/cancel-posts/{id}/{ownerId}")
     public ResponseEntity<String> cancelPost(@PathVariable Integer id,@PathVariable Integer ownerId) {
         postService.cancelPost(id,ownerId);
         return ResponseEntity.ok("Post canceled.");
     }
-
+    //khadija
     @PutMapping("/posts/{id}/{adminId}")
     public ResponseEntity<String> rejectPost(@PathVariable Integer id, @RequestBody String reason, @PathVariable Integer adminId) {
         postService.rejectPost(id, reason, adminId);

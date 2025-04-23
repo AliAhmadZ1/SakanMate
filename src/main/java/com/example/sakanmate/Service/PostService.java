@@ -32,17 +32,17 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public void addPost(PostDTO postDTO){
-        Apartment apartment = apartmentRepository.findApartmentById(postDTO.getApartment_id());
-        if (apartment==null)
-            throw new ApiException("apartment not found");
-        Owner owner = ownerRepository.findOwnerById(apartment.getOwner().getId());
-        if (owner==null)
-            throw new ApiException("owner don't found");
-        postDTO.setPostDate(LocalDate.now());
-        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,false,LocalDateTime.now(),"",null,apartment,owner,null);
-        postRepository.save(post);
-    }
+//    public void addPost(PostDTO postDTO){
+//        Apartment apartment = apartmentRepository.findApartmentById(postDTO.getApartment_id());
+//        if (apartment==null)
+//            throw new ApiException("apartment not found");
+//        Owner owner = ownerRepository.findOwnerById(apartment.getOwner().getId());
+//        if (owner==null)
+//            throw new ApiException("owner don't found");
+//        postDTO.setPostDate(LocalDate.now());
+//        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),0,false,LocalDateTime.now(),"",null,apartment,owner,null);
+//        postRepository.save(post);
+//    }
 
     public void updatePost(Integer id, PostDTO postDTO){
         Post oldPost = postRepository.findPostById(id);
@@ -65,11 +65,11 @@ public class PostService {
     public void approveAndPublishPost(Integer postId, Integer adminId) {
         Post post = postRepository.findPostById(postId);
         if (post==null){
-            throw new RuntimeException("Post not found");
+            throw new ApiException("Post not found");
         }
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin==null){
-            throw new RuntimeException("Admin not found");
+            throw new ApiException("Admin not found");
         }
 
         if (post.isApproved())
@@ -88,11 +88,11 @@ public class PostService {
     public void cancelPost(Integer postId,Integer ownerId) {
         Owner owner = ownerRepository.findOwnerById(ownerId);
         if (owner == null) {
-            throw new RuntimeException("Owner not found");
+            throw new ApiException("Owner not found");
         }
         Post post = postRepository.findPostById(postId);
         if (post==null){
-            throw new RuntimeException("Post not found");
+            throw new ApiException("Post not found");
         }
 
         post.setStatus("CANCELED");
@@ -102,12 +102,15 @@ public class PostService {
     public void rejectPost(Integer postId, String reason, Integer adminId) {
         Post post = postRepository.findPostById(postId);
         if (post==null){
-            throw new RuntimeException("Post not found");
+            throw new ApiException("Post not found");
         }
 
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin==null){
-            throw new RuntimeException("Admin not found");
+            throw new ApiException("Admin not found");
+        }
+        if (reason==null){
+            throw new ApiException(reason);
         }
 
         post.setApproved(false);
