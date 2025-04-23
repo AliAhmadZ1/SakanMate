@@ -41,13 +41,14 @@ public class OwnerController {
         return ResponseEntity.status(200).body(new ApiResponse("owner deleted"));
     }
 
-
+    //khadija
     @PutMapping("/owners/{id}/approve/{adminId}")
     public ResponseEntity<String> approveOwner(@PathVariable Integer id,@PathVariable Integer adminId) {
         ownerService.approveOwner(id,adminId);
         return ResponseEntity.ok("Owner approved.");
     }
 
+    //khadija
     @PutMapping("/reject-by-admin/{id}/{adminId}")
     public ResponseEntity<String> rejectOwnerByAdmin(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
         ownerService.rejectOwnerByAdmin(id, reason,adminId);

@@ -47,12 +47,12 @@ public class ContractController {
                 .body(pdfBytes);
     }
 
-
+    //khadija
     @GetMapping("/is-expired/{id}")
     public ResponseEntity<Boolean> isContractExpired(@PathVariable Integer id) {
         return ResponseEntity.ok(contractService.isContractExpired(id));
     }
-
+    //khadija
     @PostMapping("/{oldId}/renew")
     public ResponseEntity<Contract> requestRenewal(
             @PathVariable Integer oldId,
@@ -60,7 +60,7 @@ public class ContractController {
         Contract newContract = contractService.requestRenewal(oldId, months);
         return ResponseEntity.ok(newContract);
     }
-
+    //khadija
     @PutMapping("/{id}/{ownerId}approve-renewal")
     public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id,@PathVariable Integer ownerId) {
         contractService.approveRenewedContract(id,ownerId);
@@ -78,7 +78,7 @@ public class ContractController {
         contractService.createContract(adminId, requestId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
     }
-
+    //khadija
     @PutMapping("/approve-by-owner/{id}/{ownerId}")
     public ResponseEntity<String> approveContractByOwner(
             @PathVariable Integer id,
