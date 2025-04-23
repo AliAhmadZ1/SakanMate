@@ -26,7 +26,7 @@
 10. `aproveRenewedContract` - Approves renewed contract
 11. `deleteReviewByAdmin` - Removes review (Admin)
 12. `rejectApartment` - Rejects apartment with reason
-13. searchByGender` - Search renters by gender
+13. `searchByGender` - Search renters by gender
 
 ## Ali's Endpoints
 1. `makeReview` - Creates apartment review
