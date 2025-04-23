@@ -40,7 +40,7 @@ public class RenterController {
         return ResponseEntity.status(200).body(new ApiResponse("Renter deleted successfully."));
     }
 
-    @PostMapping(".request-apartment/{renterId}/{postId}")
+    @PostMapping("/request-apartment/{renterId}/{postId}")
     public ResponseEntity<ApiResponse> requestApartment(@PathVariable Integer renterId, @PathVariable Integer postId, @RequestBody int months){
         renterService.requestApartment(renterId, postId, months);
         return ResponseEntity.status(200).body(new ApiResponse("Request made successfully."));

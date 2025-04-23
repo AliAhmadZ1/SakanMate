@@ -32,8 +32,8 @@ public class PostService {
             throw new ApiException("apartment not found");
         Owner owner = ownerRepository.findOwnerById(apartment.getOwner().getId());
         postDTO.setPostDate(LocalDate.now());
-        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),null,apartment,owner,null);
-        postRepository.save(post);
+//        Post post = new Post(null,postDTO.getStatus(),postDTO.getPostDate(),null,apartment,owner,null);
+//        postRepository.save(post);
     }
 
     public void updatePost(Integer id, PostDTO postDTO){

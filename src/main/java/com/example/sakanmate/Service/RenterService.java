@@ -5,11 +5,15 @@ import com.example.sakanmate.DtoOut.RenterDtoOut;
 import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +23,11 @@ public class RenterService {
     private final RequestRepository requestRepository;
     private final ContractRepository contractRepository;
     private final ApartmentRepository apartmentRepository;
+    private final OwnerRepository ownerRepository;
+    private final JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String senderEmail;
 
     public List<RenterDtoOut> getAllRenters() {
         List<Renter> renters = renterRepository.findAll();
@@ -62,6 +71,7 @@ public class RenterService {
         Post post = postRepository.findPostById(postId);
         if (post == null) throw new ApiException("Post not found.");
 
+
         // Check the post status.
         switch (post.getStatus()) {
             case "pending" -> throw new ApiException("Post has not been approved by an admin.");
@@ -75,6 +85,17 @@ public class RenterService {
         // Make the request (make the request object) and mark the request status as pending.
         Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
         renter.getRequests().add(request);
+
+
+        // get owner id to send notification
+        Owner owner = ownerRepository.findOwnerById(post.getOwner().getId());
+        // email notification
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(senderEmail);
+        simpleMailMessage.setTo(owner.getEmail());
+        simpleMailMessage.setText("You have new request on apartment "
+                +post.getApartment().getTitle()+", from renter: "+renter.getName()+"\n you can accept now");
+        simpleMailMessage.setSubject("New Request ");
 
         // Save the objects in the database.
         requestRepository.save(request);
