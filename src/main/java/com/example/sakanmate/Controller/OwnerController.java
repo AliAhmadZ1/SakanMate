@@ -66,7 +66,12 @@ public class OwnerController {
 
     @GetMapping("/get-owner-revenue/{ownerId}")
     public ResponseEntity<ApiResponse> getOwnerTotalRevenue(@PathVariable Integer ownerId){
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("The owner total revenue is: " + ownerService.getOwnerRevenue(ownerId)));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("The owner total revenue is: " + ownerService.getOwnerRevenue(ownerId) + "."));
+    }
+
+    @GetMapping("/get-owner-number-of-renters/{ownerId}")
+    public ResponseEntity<ApiResponse> getOwnerNumberOfRenters(@PathVariable Integer ownerId){
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("The owner has " + ownerService.getOwnerNumberOfRenters(ownerId) + " renters." ));
     }
 
 
