@@ -51,35 +51,6 @@ public class RenterService {
         renterRepository.delete(renter);
     }
 
-    //1-
-    // This is where the request get asked by the user given the post id and the renter id
-    public void requestApartment(Integer renterId, Integer postId, int months) {
-        // Check if the renter exists in the database.
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter == null) throw new ApiException("Renter not found.");
-
-        // Check if the post exists in the database.
-        Post post = postRepository.findPostById(postId);
-        if (post == null) throw new ApiException("Post not found.");
-
-        // Check the post status.
-        switch (post.getStatus()) {
-            case "pending" -> throw new ApiException("Post has not been approved by an admin.");
-            case "canceled" -> throw new ApiException("Post has been canceled by the owner.");
-            case "rented" -> throw new ApiException("This apartment has been rented.");
-        }
-
-        // Check the months
-        if (months < 1) throw new ApiException("The months need to greater than 1.");
-
-        // Make the request (make the request object) and mark the request status as pending.
-        Request request = new Request(null, "pending", LocalDateTime.now(), months, renter, post);
-        renter.getRequests().add(request);
-
-        // Save the objects in the database.
-        requestRepository.save(request);
-        renterRepository.save(renter);
-    }
 
     // 2-
     public String checkRequestStatus(Integer renterId, Integer requestId) {
