@@ -53,9 +53,9 @@ public class ContractController {
         return ResponseEntity.ok(newContract);
     }
 
-    @PutMapping("/{id}/approve-renewal")
-    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id) {
-        contractService.approveRenewedContract(id);
+    @PutMapping("/{id}/{ownerId}approve-renewal")
+    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id,@PathVariable Integer ownerId) {
+        contractService.approveRenewedContract(id,ownerId);
         return ResponseEntity.ok("Renewed contract approved by admin.");
     }
 

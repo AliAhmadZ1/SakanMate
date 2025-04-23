@@ -86,7 +86,7 @@ public class ContractService {
         return contractRepository.save(newContract);
     }
 
-    public void approveRenewedContract(Integer contractId) {
+    public void approveRenewedContract(Integer contractId,Integer ownerId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
             throw new RuntimeException("Contract not found");
@@ -94,6 +94,10 @@ public class ContractService {
 
         if (!contract.getIsRenewed()) {
             throw new RuntimeException("This is not a renewal contract.");
+        }
+        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
+
+            throw new ApiException("Owner not found");
         }
 
         contract.setOwnerApproved(true);

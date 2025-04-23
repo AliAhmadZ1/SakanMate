@@ -44,9 +44,9 @@ public class PostController {
         return ResponseEntity.ok("Post approved by admin.");
     }
 
-    @PutMapping("/cancel-posts/{id}")
-    public ResponseEntity<String> cancelPost(@PathVariable Integer id) {
-        postService.cancelPost(id);
+    @PutMapping("/cancel-posts/{id}/{ownerId}")
+    public ResponseEntity<String> cancelPost(@PathVariable Integer id,@PathVariable Integer ownerId) {
+        postService.cancelPost(id,ownerId);
         return ResponseEntity.ok("Post canceled.");
     }
 

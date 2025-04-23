@@ -2,8 +2,10 @@ package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
 import com.example.sakanmate.Model.Admin;
+import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Repository.AdminRepository;
+import com.example.sakanmate.Repository.OwnerRepository;
 import com.example.sakanmate.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final AdminRepository adminRepository;
+    private final OwnerRepository ownerRepository;
 
     public List<Post> getAll(){
         return postRepository.findAll();
@@ -63,7 +66,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void cancelPost(Integer postId) {
+    public void cancelPost(Integer postId,Integer ownerId) {
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner == null) {
+            throw new RuntimeException("Owner not found");
+        }
         Post post = postRepository.findPostById(postId);
         if (post==null){
             throw new RuntimeException("Post not found");
