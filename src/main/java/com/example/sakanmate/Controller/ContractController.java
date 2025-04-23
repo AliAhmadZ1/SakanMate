@@ -61,9 +61,9 @@ public class ContractController {
         return ResponseEntity.ok(newContract);
     }
 
-    @PutMapping("/{id}/approve-renewal")
-    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id) {
-        contractService.approveRenewedContract(id);
+    @PutMapping("/{id}/{ownerId}approve-renewal")
+    public ResponseEntity<String> approveRenewedContract(@PathVariable Integer id,@PathVariable Integer ownerId) {
+        contractService.approveRenewedContract(id,ownerId);
         return ResponseEntity.ok("Renewed contract approved by admin.");
     }
 
@@ -77,5 +77,14 @@ public class ContractController {
     public ResponseEntity<ApiResponse> createContract(@PathVariable Integer adminId, @PathVariable Integer requestId){
         contractService.createContract(adminId, requestId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Contract created successfully/"));
+    }
+
+    @PutMapping("/approve-by-owner/{id}/{ownerId}")
+    public ResponseEntity<String> approveContractByOwner(
+            @PathVariable Integer id,
+            @PathVariable Integer ownerId) {
+
+        contractService.ownerApproveContract(id, ownerId);
+        return ResponseEntity.ok("Contract approved by owner.");
     }
 }

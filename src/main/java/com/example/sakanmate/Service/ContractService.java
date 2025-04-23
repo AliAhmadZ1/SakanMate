@@ -141,11 +141,13 @@ public class ContractService {
         newContract.setIsRenewed(true);
         newContract.setAdminApproved(false);
         newContract.setRenters(oldContract.getRenters());
+        newContract.setOwnerApproved(false);
+        newContract.setRenters(oldContract.getRenters());
 
         return contractRepository.save(newContract);
     }
 
-    public void approveRenewedContract(Integer contractId) {
+    public void approveRenewedContract(Integer contractId,Integer ownerId) {
         Contract contract = contractRepository.findContractById(contractId);
         if (contract==null){
             throw new RuntimeException("Contract not found");
@@ -154,8 +156,12 @@ public class ContractService {
         if (!contract.getIsRenewed()) {
             throw new RuntimeException("This is not a renewal contract.");
         }
+        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
 
-        contract.setAdminApproved(true);
+            throw new ApiException("Owner not found");
+        }
+
+        contract.setOwnerApproved(true);
         contractRepository.save(contract);
 
         Apartment apt = contract.getApartment();
@@ -213,4 +219,28 @@ public class ContractService {
         // Save the contact in the database.
         contractRepository.save(contract);
     }
+
+    public void ownerApproveContract(Integer contractId,Integer ownerId) {
+        Contract contract = contractRepository.findContractById(contractId);
+        if (contract==null){
+            throw new ApiException("Contract not found.");
+        }
+        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
+
+            throw new ApiException("Owner not found");
+        }
+
+        Apartment apartment = contract.getApartment();
+
+        int currentRentersCount = contract.getRenters().size();
+        int requiredRentersCount = apartment.getMax_renter();
+
+        if (currentRentersCount < requiredRentersCount) {
+            throw new ApiException("Only " + currentRentersCount + " renters accepted. Required: " + requiredRentersCount);
+        }
+
+        contract.setOwnerApproved(true);
+        contractRepository.save(contract);
+    }
+
 }

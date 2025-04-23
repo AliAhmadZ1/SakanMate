@@ -5,10 +5,12 @@ import com.example.sakanmate.DTO_In.PostDTO;
 import com.example.sakanmate.Model.Apartment;
 import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Model.Admin;
+import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Repository.ApartmentRepository;
 import com.example.sakanmate.Repository.OwnerRepository;
 import com.example.sakanmate.Repository.AdminRepository;
+import com.example.sakanmate.Repository.OwnerRepository;
 import com.example.sakanmate.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class PostService {
     private final ApartmentRepository apartmentRepository;
     private final OwnerRepository ownerRepository;
     private final AdminRepository adminRepository;
+    private final OwnerRepository ownerRepository;
 
     public List<Post> getAll(){
         return postRepository.findAll();
@@ -77,7 +80,11 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void cancelPost(Integer postId) {
+    public void cancelPost(Integer postId,Integer ownerId) {
+        Owner owner = ownerRepository.findOwnerById(ownerId);
+        if (owner == null) {
+            throw new RuntimeException("Owner not found");
+        }
         Post post = postRepository.findPostById(postId);
         if (post==null){
             throw new RuntimeException("Post not found");

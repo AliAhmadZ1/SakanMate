@@ -38,9 +38,9 @@ public class ApartmentController {
         return ResponseEntity.status(200).body(new ApiResponse("apartment deleted"));
     }
 
-    @PutMapping("/apartments/{id}/approve")
-    public ResponseEntity<String> approveApartment(@PathVariable Integer id) {
-        apartmentService.approveApartment(id);
+    @PutMapping("/approve/{id}/{adminId}")
+    public ResponseEntity<String> approveApartment(@PathVariable Integer id,@PathVariable Integer adminId) {
+        apartmentService.approveApartment(id,adminId);
         return ResponseEntity.ok("Apartment approved.");
     }
 }

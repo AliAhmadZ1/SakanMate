@@ -46,12 +46,15 @@ public class OwnerController {
     @PutMapping("/owners/{id}/approve")
     public ResponseEntity<String> approveOwner(@PathVariable Integer id) {
         ownerService.approveOwner(id);
+    @PutMapping("/owners/{id}/approve/{adminId}")
+    public ResponseEntity<String> approveOwner(@PathVariable Integer id,@PathVariable Integer adminId) {
+        ownerService.approveOwner(id,adminId);
         return ResponseEntity.ok("Owner approved.");
     }
 
-    @PutMapping("/reject-by-admin/{id}")
-    public ResponseEntity<String> rejectOwnerByAdmin(@PathVariable Integer id, @RequestBody String reason) {
-        ownerService.rejectOwnerByAdmin(id, reason);
+    @PutMapping("/reject-by-admin/{id}/{adminId}")
+    public ResponseEntity<String> rejectOwnerByAdmin(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
+        ownerService.rejectOwnerByAdmin(id, reason,adminId);
         return ResponseEntity.ok("Owner rejected based on license.");
     }
 

@@ -1,9 +1,11 @@
 package com.example.sakanmate.Service;
 
 import com.example.sakanmate.Api.ApiException;
+import com.example.sakanmate.Model.Admin;
 import com.example.sakanmate.Model.Owner;
 import com.example.sakanmate.Model.Post;
 import com.example.sakanmate.Model.Request;
+import com.example.sakanmate.Repository.AdminRepository;
 import com.example.sakanmate.Repository.OwnerRepository;
 import com.example.sakanmate.Repository.PostRepository;
 import com.example.sakanmate.Repository.RequestRepository;
@@ -19,6 +21,7 @@ public class OwnerService {
     private final OwnerRepository ownerRepository;
     private final RequestRepository requestRepository;
     private final PostRepository postRepository;
+    private final AdminRepository adminRepository;
 
     public List<Owner> getAllOwners() {
         return ownerRepository.findAll();
@@ -50,6 +53,11 @@ public class OwnerService {
 
 
     public void approveOwner(Integer ownerId) {
+    public void approveOwner(Integer ownerId,Integer adminId) {
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null) {
+            throw new RuntimeException("Admin not found");
+        }
         Owner owner = ownerRepository.findOwnerById(ownerId);
         if (owner==null){
             throw new RuntimeException("Owner not found");
@@ -59,7 +67,11 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
-    public void rejectOwnerByAdmin(Integer id, String reason) {
+    public void rejectOwnerByAdmin(Integer id, String reason,Integer adminId) {
+        Admin admin = adminRepository.findAdminsById(adminId);
+        if (admin == null) {
+            throw new RuntimeException("Admin not found");
+        }
         Owner owner = ownerRepository.findOwnerById(id);
         if (owner==null){
             throw new RuntimeException("Owner not found");
