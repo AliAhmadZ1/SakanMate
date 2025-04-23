@@ -11,6 +11,6 @@ import java.util.List;
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     Request findRequestById(Integer requestId);
 
-    @Query("select r from Request r where r.post.owner = ?1 and r.state = 'pending'")
+    @Query("select r from Request r where r.post.owner.id = ?1 and r.state = 'pending'")
     List<Request> findRequestsByOwnerAndStatus(Integer ownerId);
 }

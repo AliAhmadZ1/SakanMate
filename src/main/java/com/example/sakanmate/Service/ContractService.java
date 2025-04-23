@@ -19,14 +19,20 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
 import com.example.sakanmate.Repository.RenterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +42,9 @@ public class ContractService {
     private final RenterRepository renterRepository;
     private final RequestRepository requestRepository;
     private final AdminRepository adminRepository;
-
+    private final JavaMailSender javaMailSender;
+    @Value("${spring.mail.username}")
+    private String senderEmail;
     public List<ContractDtoOut> getAllContracts() {
         List<Contract> contracts = contractRepository.findAll();
         List<ContractDtoOut> contractDtoOuts = new ArrayList<>();
@@ -64,6 +72,7 @@ public class ContractService {
         contractRepository.delete(contract);
     }
 
+    // Ayman
     public byte[] getContractAsPdf(Integer contractId){
         Contract contract = contractRepository.findContractById(contractId);
         if(contract == null) throw new ApiException("Contract not found.");
@@ -71,8 +80,8 @@ public class ContractService {
         return createPlainTextPdf(contract);
 
     }
-
-    //This method was taking from Bealdung and customized to the contract.
+    // Ayman
+    // This method was taking from Bealdung and customized to the contract.
     private byte[] createPlainTextPdf(Contract contract) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -168,6 +177,8 @@ public class ContractService {
         apartmentRepository.save(apt);
     }
 
+    //Ayman
+    // Called by the renter to accept a contract.
     public void acceptContract(Integer renterId, Integer contractId, Integer requestId) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
@@ -187,6 +198,7 @@ public class ContractService {
         contractRepository.save(contract);
     }
 
+    //Ayman
     // Admins only can make the contracts, The contract are based on the request,
     // when a request get approved by an owner the admin can create the contract.
     // Maybe we can add an endpoint for the owner where he can send a notification to an admin to create the contract
@@ -212,7 +224,7 @@ public class ContractService {
 
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
-        Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
+        Contract contract = new Contract(null, totalPrice, LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusMonths(request.getMonths()), false,false,false, null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
@@ -240,6 +252,19 @@ public class ContractService {
 
         contract.setOwnerApproved(true);
         contractRepository.save(contract);
+        sendEmailToRentersWhenContractComplete(contract.getRenters());
+    }
+
+    public void sendEmailToRentersWhenContractComplete(Set<Renter> renters){
+        for(Renter renter : renters){
+            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            simpleMailMessage.setFrom(senderEmail);
+            simpleMailMessage.setTo(renter.getEmail());
+            simpleMailMessage.setText("The contract have been approved by the owner" + "\nhttp://localhost:8080/api/v1/sakan-mate/contract/get-contract-as-pdf/" + renter.getId());
+            simpleMailMessage.setSubject("Contract new update");
+            simpleMailMessage.setSentDate(Date.from(Instant.now()));
+            javaMailSender.send(simpleMailMessage);
+        }
     }
 
 }

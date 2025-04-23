@@ -5,6 +5,7 @@ import com.example.sakanmate.Model.Request;
 import com.example.sakanmate.Repository.RequestRepository;
 import com.example.sakanmate.Service.RequestService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/sakan-mate/renter")
+@RequestMapping("/api/v1/sakan-mate/request")
 public class RequestController {
     private final RequestService requestService;
     @PostMapping("/request-apartment/{renterId}/{postId}")
-    public ResponseEntity<ApiResponse> requestApartment(@PathVariable Integer renterId, @PathVariable Integer postId, @RequestBody int months){
+    public ResponseEntity<ApiResponse> requestApartment(@PathVariable Integer renterId, @PathVariable Integer postId, @RequestParam Integer months){
         requestService.requestApartment(renterId, postId, months);
         return ResponseEntity.status(200).body(new ApiResponse("Request made successfully."));
     }
