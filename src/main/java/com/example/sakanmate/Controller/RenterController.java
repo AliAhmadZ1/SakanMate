@@ -48,4 +48,12 @@ public class RenterController {
         renterService.makeReview(id, apartment_id, apartmentReview);
         return ResponseEntity.status(200).body(new ApiResponse("apartment review sent"));
     }
+
+
+    //khadija
+    @GetMapping("/search-by-gender/{gender}")
+    public ResponseEntity<List<Renter>> searchByGender(@PathVariable String gender) {
+        return ResponseEntity.ok(renterService.getRentersByGender(gender));
+    }
+
 }
