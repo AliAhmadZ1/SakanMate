@@ -50,35 +50,4 @@ public class RenterService {
         if (renter == null) throw new ApiException("Renter not found.");
         renterRepository.delete(renter);
     }
-
-
-    // 2-
-    public String checkRequestStatus(Integer renterId, Integer requestId) {
-        // Check if the renter exists in the database.
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter == null) throw new ApiException("Renter not found.");
-
-        // Check if the post exists in the database.
-        Request request = requestRepository.findRequestById(requestId);
-        if (request == null) throw new ApiException("Request not found.");
-
-        // Check if the request was made by the renter.
-        if (request.getRenter() != renter) throw new ApiException("Request and renter do not match.");
-        return request.getState();
-    }
-
-    // 3-
-    public void cancelRequest(Integer renterId, Integer requestId) {
-        // Check if the renter exists in the database.
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter == null) throw new ApiException("Renter not found.");
-
-        // Check if the post exists in the database.
-        Request request = requestRepository.findRequestById(requestId);
-        if (request == null) throw new ApiException("Request not found.");
-
-        // Change the state and save the request.
-        request.setState("canceled");
-        requestRepository.save(request);
-    }
 }

@@ -17,4 +17,16 @@ public class RequestController {
         requestService.requestApartment(renterId, postId, months);
         return ResponseEntity.status(200).body(new ApiResponse("Request made successfully."));
     }
+
+    @GetMapping("/check-request-status/{renterId}/{requestId}")
+    public ResponseEntity<String> checkRequestStatus(@PathVariable Integer renterId, @PathVariable Integer requestId){
+        return ResponseEntity.status(200).body(requestService.checkRequestStatus(renterId, requestId));
+    }
+
+    @GetMapping("/cancel-request/{renterId}/{requestId}")
+    public ResponseEntity<ApiResponse> cancelRequest(@PathVariable Integer renterId, @PathVariable Integer requestId){
+        requestService.cancelRequest(renterId, requestId);
+        return ResponseEntity.status(200).body(new ApiResponse("Request canceled successfully."));
+
+    }
 }
