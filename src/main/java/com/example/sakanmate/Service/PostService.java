@@ -60,23 +60,29 @@ public class PostService {
 
         postRepository.delete(post);
     }
-    public void approvePost(Integer postId, Integer adminId) {
+
+    //Khadija
+    public void approveAndPublishPost(Integer postId, Integer adminId) {
         Post post = postRepository.findPostById(postId);
         if (post==null){
             throw new RuntimeException("Post not found");
         }
-
         Admin admin = adminRepository.findAdminsById(adminId);
         if (admin==null){
             throw new RuntimeException("Admin not found");
         }
 
+        if (post.isApproved())
+            throw new ApiException("is approved already");
         post.setStatus("APPROVED");
         post.setApproved(true);
         post.setApprovedDate(LocalDateTime.now());
         post.setAdmin(admin);
-
         postRepository.save(post);
+
+        //Ali edit
+        admin.getPost().add(post);
+        adminRepository.save(admin);
     }
 
     public void cancelPost(Integer postId,Integer ownerId) {

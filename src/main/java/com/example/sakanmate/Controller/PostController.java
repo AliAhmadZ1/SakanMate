@@ -41,7 +41,7 @@ public class PostController {
 
     @PutMapping("/posts/{postId}/approve/{adminId}")
     public ResponseEntity<String> approvePost(@PathVariable Integer postId, @PathVariable Integer adminId) {
-        postService.approvePost(postId, adminId);
+        postService.approveAndPublishPost(postId, adminId);
         return ResponseEntity.ok("Post approved by admin.");
     }
 
