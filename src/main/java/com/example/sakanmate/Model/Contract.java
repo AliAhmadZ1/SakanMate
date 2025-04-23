@@ -40,10 +40,8 @@ public class Contract {
     private Boolean isRenewed = false;
     private Boolean adminApproved = false;
 
-    @OneToOne
-    @MapsId
-    @JsonIgnore
-    private Renter renter;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
+    private Set<Renter> renters;
 
     @OneToOne
     @JsonIgnore

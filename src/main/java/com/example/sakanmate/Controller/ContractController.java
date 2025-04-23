@@ -47,13 +47,6 @@ public class ContractController {
                 .body(pdfBytes);
     }
 
-    @PutMapping("/accept/{id}/{renterId}")
-    public ResponseEntity<String> acceptContract(
-            @PathVariable Integer id,
-            @PathVariable Integer renterId) {
-        contractService.renterAcceptContract(id, renterId);
-        return ResponseEntity.ok("Contract accepted by renter.");
-    }
 
     @GetMapping("/is-expired/{id}")
     public ResponseEntity<Boolean> isContractExpired(@PathVariable Integer id) {

@@ -34,7 +34,6 @@ public class ContractService {
     private final ContractRepository contractRepository;
     private final ApartmentRepository apartmentRepository;
     private final RenterRepository renterRepository;
-    private final RenterRepository renterRepository;
     private final RequestRepository requestRepository;
     private final AdminRepository adminRepository;
 
@@ -112,28 +111,7 @@ public class ContractService {
         }
     }
 
-    public void renterAcceptContract(Integer contractId, Integer renterId) {
-        Contract contract = contractRepository.findContractById(contractId);
-        if (contract==null){
-            throw new RuntimeException("Contract not found");
-        }
 
-        if (contract.getRenter() != null) {
-            throw new RuntimeException("Contract is already accepted.");
-        }
-
-        Renter renter = renterRepository.findRenterById(renterId);
-        if (renter==null){
-            throw new RuntimeException("Renter not found");
-        }
-
-        contract.setRenter(renter);
-        contractRepository.save(contract);
-
-        Apartment apartment = contract.getApartment();
-        apartment.setNumber_of_remaining(apartment.getNumber_of_remaining() - 1);
-        apartmentRepository.save(apartment);
-    }
 
     public boolean isContractExpired(Integer contractId) {
         Contract contract = contractRepository.findContractById(contractId);
@@ -162,7 +140,7 @@ public class ContractService {
         newContract.setTotalPrice(oldContract.getTotalPrice() * monthsToExtend);
         newContract.setIsRenewed(true);
         newContract.setAdminApproved(false);
-        newContract.setRenter(oldContract.getRenter());
+        newContract.setRenters(oldContract.getRenters());
 
         return contractRepository.save(newContract);
     }
@@ -230,7 +208,7 @@ public class ContractService {
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
         Contract contract = new Contract(null, totalPrice, LocalDateTime.now(),
-                LocalDateTime.now().plusMonths(request.getMonths()), null, request.getPost().getApartment(), request.getPost().getOwner());
+                LocalDateTime.now().plusMonths(request.getMonths()), false, false, null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
         contractRepository.save(contract);
