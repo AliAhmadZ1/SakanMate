@@ -132,7 +132,7 @@ public class RequestService {
         Post post = request.getPost();
 
         // Check if the number of accepted request has reached the max.
-        if (post.getNumberOfApprovedRequests() < 1)
+        if (post.getNumberOfApprovedRequests() == post.getApartment().getMax_renters())
             throw new ApiException("The Post has reached the maximum number of accepted requests.");
 
         // Accept the request.
