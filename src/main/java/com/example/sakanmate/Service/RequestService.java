@@ -131,9 +131,9 @@ public class RequestService {
         //Get the post
         Post post = request.getPost();
 
-        // Check if the apartment is full
-        if (post.getApartment().getNumber_of_remaining() < 1)
-            throw new ApiException("The apartment is full.");
+        // Check if the number of accepted request has reached the max.
+        if (post.getNumberOfApprovedRequests() < 1)
+            throw new ApiException("The Post has reached the maximum number of accepted requests.");
 
         // Accept the request.
         request.setState("accepted");
