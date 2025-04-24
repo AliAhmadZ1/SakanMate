@@ -107,7 +107,7 @@ public class PostService {
             throw new ApiException("Post not found");
         }
 
-        post.setStatus("CANCELED");
+        post.setStatus("canceled");
         postRepository.save(post);
     }
 
@@ -152,4 +152,5 @@ public class PostService {
     public List<Post> getNewPosts(){
         return postRepository.findPostsByAvailability();
     }
+
 }
