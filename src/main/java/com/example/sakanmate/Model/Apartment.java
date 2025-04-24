@@ -39,7 +39,7 @@ public class Apartment {
     private String document_number;
     @Positive
     @NotNull(message = "The monthly price can not be null.")
-    @Column(columnDefinition = "boolean not null")
+    @Column(columnDefinition = "double not null")
     private double monthlyPrice;
 
     private boolean isApproved = false;
