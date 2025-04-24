@@ -37,8 +37,6 @@ public class Contract {
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime endDate;
     @Column(columnDefinition = "bool")
-    private Boolean isRenewed = false;
-    @Column(columnDefinition = "bool")
     private Boolean ownerApproved = false;
     @Column(columnDefinition = "bool")
     private Boolean renterAccepted = false;

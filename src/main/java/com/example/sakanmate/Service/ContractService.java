@@ -142,18 +142,10 @@ public class ContractService {
             throw new ApiException("Current contract is still active");
         }
 
-        Contract newContract = new Contract();
-        newContract.setApartment(oldContract.getApartment());
-        newContract.setOwner(oldContract.getOwner());
-        newContract.setStartDate(LocalDateTime.now());
-        newContract.setEndDate(LocalDateTime.now().plusMonths(monthsToExtend));
-        newContract.setTotalPrice(oldContract.getTotalPrice() * monthsToExtend);
-        newContract.setIsRenewed(true);
-        newContract.setRenters(oldContract.getRenters());
-        newContract.setOwnerApproved(false);
-        newContract.setRenterAccepted(oldContract.getRenterAccepted());
-
-        contractRepository.save(newContract);
+        oldContract.setStartDate(LocalDateTime.now().plusDays(1));
+        oldContract.setEndDate(oldContract.getStartDate().plusMonths(monthsToExtend));
+        oldContract.setOwnerApproved(false);
+        contractRepository.save(oldContract);
     }
 
     public void approveRenewedContract(Integer contractId, Integer ownerId) {
@@ -162,13 +154,13 @@ public class ContractService {
             throw new ApiException("Contract not found");
         }
 
-        if (!contract.getIsRenewed()) {
-            throw new ApiException("This is not a renewal contract.");
-        }
-        if (contract.getOwner() == null || !contract.getOwner().getId().equals(ownerId)) {
+
+        if (contract.getOwner() == null)  {
 
             throw new ApiException("Owner not found");
         }
+
+        if(!contract.getOwner().getId().equals(ownerId)) throw new ApiException("The contract does not belong to the owner.");
 
         contract.setOwnerApproved(true);
         contractRepository.save(contract);
@@ -232,7 +224,7 @@ public class ContractService {
         // Create the contract.
         // The renters will be initially null, when a renter approve the contract than the renter will be added to the set of renters.
         Contract contract = new Contract(null, totalPrice, LocalDateTime.now().plusDays(1),
-                LocalDateTime.now().plusMonths(request.getMonths()), false, false, false, null, request.getPost().getApartment(), request.getPost().getOwner());
+                LocalDateTime.now().plusMonths(request.getMonths()), false, false, null, request.getPost().getApartment(), request.getPost().getOwner());
 
         // Save the contact in the database.
         contractRepository.save(contract);
