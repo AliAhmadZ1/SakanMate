@@ -126,7 +126,7 @@ public class PostService {
         }
 
         post.setApproved(false);
-        post.setStatus("REJECTED");
+        post.setStatus("rejected");
         post.setRejectionReason(reason);
         post.setApprovedDate(LocalDateTime.now());
         post.setAdmin(admin);

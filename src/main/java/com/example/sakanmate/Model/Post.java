@@ -29,7 +29,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Pattern(regexp = "approved|pending|canceled|rented")
+    @Pattern(regexp = "approved|pending|canceled|rented|rejected")
     private String status;
     @Column(columnDefinition = "datetime")
     private LocalDateTime postDate;
