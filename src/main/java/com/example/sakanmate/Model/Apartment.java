@@ -27,7 +27,7 @@ public class Apartment {
     @NotEmpty(message = "The description can not be null.")
     @Column(columnDefinition = "varchar(200) not null")
     private String description;
-    @NotEmpty(message = "The number_of_remaining can not be null.")
+//    @NotEmpty(message = "The number_of_remaining can not be null.")
     @Column(columnDefinition = "int not null")
     private Integer number_of_remaining;
     @NotNull(message = "The max renters can not be null.")

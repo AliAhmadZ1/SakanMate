@@ -29,11 +29,11 @@ public class Contract {
     @Column(columnDefinition = "double not null")
     private double totalPrice;
     @NotNull(message = "The start date can not be null.")
-    @FutureOrPresent
+//    @FutureOrPresent
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime startDate;
     @NotNull(message = "The end date can not be null.")
-    @Future
+//    @Future
     @Column(columnDefinition = "datetime not null")
     private LocalDateTime endDate;
     @Column(columnDefinition = "bool")
@@ -53,4 +53,5 @@ public class Contract {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     @JsonIgnore
     private Owner owner;
+
 }

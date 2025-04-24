@@ -39,8 +39,8 @@ public class ComplaintController {
     // Endpoint 7
     //ayman
     @PostMapping("/file-complaint/{renterId}/{apartmentId}")
-    public ResponseEntity<ApiResponse> fileComplaint(@PathVariable Integer renterId, @PathVariable Integer apartmentId, @RequestBody String title, @RequestBody String description){
-        complaintService.fileAComplaint(renterId, apartmentId, title, description);
+    public ResponseEntity<ApiResponse> fileComplaint(@PathVariable Integer renterId, @PathVariable Integer apartmentId, @RequestBody Complaint complaint){
+        complaintService.fileAComplaint(renterId, apartmentId, complaint);
         return ResponseEntity.status(200).body(new ApiResponse("Complaint filed successfully."));
     }
 

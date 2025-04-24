@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -87,4 +88,12 @@ public class AdviseController {
         String msg = e.getMessage();
         return ResponseEntity.status(400).body(new ApiResponse(msg));
     }
+
+    @ExceptionHandler(value = TransactionSystemException.class)
+    public ResponseEntity<ApiResponse> TransactionSystemException(TransactionSystemException e) {
+        String msg = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(msg));
+    }
+
+
 }

@@ -43,7 +43,7 @@ public class ComplaintService {
 
     // Ayman
     // Called by the user to file a complaint.
-    public void fileAComplaint(Integer renterId, Integer apartmentId, String title, String description) {
+    public void fileAComplaint(Integer renterId, Integer apartmentId, Complaint complaint) {
         // Check if the renter exists in the database.
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
@@ -57,7 +57,8 @@ public class ComplaintService {
 //            throw new ApiException("The apartment does not belong to the renter.");
 
         // Make the complaint
-        Complaint complaint = new Complaint(null, title, description, null, renter, apartment);
+        Complaint newComplaint = new Complaint(null, complaint.getTitle(), complaint.getDescription(), null, renter, apartment);
+        complaintRepository.save(newComplaint);
     }
 
     // Ayman

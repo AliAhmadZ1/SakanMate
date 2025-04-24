@@ -42,8 +42,8 @@ public class ApartmentController {
 
     // Endpoint 2
     //khadija
-    @PutMapping("/reject-apartment/{id}/{adminId}")
-    public ResponseEntity<String> rejectApartment(@PathVariable Integer id, @RequestBody String reason,@PathVariable Integer adminId) {
+    @PutMapping("/reject-apartment/{id}/{adminId}/reason/{reason}")
+    public ResponseEntity<String> rejectApartment(@PathVariable Integer id, @PathVariable String reason,@PathVariable Integer adminId) {
         apartmentService.rejectApartment(id, reason, adminId);
         return ResponseEntity.ok("Apartment rejected.");
     }

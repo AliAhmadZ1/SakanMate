@@ -66,11 +66,11 @@ public class ContractController {
     // Endpoint 11
     //khadija
     @PostMapping("/{oldId}/renew")
-    public ResponseEntity<Contract> requestRenewal(
+    public ResponseEntity requestRenewal(
             @PathVariable Integer oldId,
             @RequestParam int months) {
-        Contract newContract = contractService.requestRenewal(oldId, months);
-        return ResponseEntity.ok(newContract);
+        contractService.requestRenewal(oldId, months);
+        return ResponseEntity.ok(new ApiResponse("contract renewed"));
     }
 
     // Endpoint 12

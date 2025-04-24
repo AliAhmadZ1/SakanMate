@@ -132,7 +132,7 @@ public class ContractService {
         return LocalDateTime.now().isAfter(contract.getEndDate());
     }
 
-    public Contract requestRenewal(Integer oldContractId, int monthsToExtend) {
+    public void requestRenewal(Integer oldContractId, int monthsToExtend) {
         Contract oldContract = contractRepository.findContractById(oldContractId);
         if (oldContract==null){
             throw new ApiException("Old contract not found");
@@ -151,9 +151,9 @@ public class ContractService {
         newContract.setIsRenewed(true);
         newContract.setRenters(oldContract.getRenters());
         newContract.setOwnerApproved(false);
-        newContract.setRenters(oldContract.getRenters());
+        newContract.setRenterAccepted(oldContract.getRenterAccepted());
 
-        return contractRepository.save(newContract);
+        contractRepository.save(newContract);
     }
 
     public void approveRenewedContract(Integer contractId, Integer ownerId) {
