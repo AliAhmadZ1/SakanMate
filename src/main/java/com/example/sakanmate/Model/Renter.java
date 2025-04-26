@@ -32,6 +32,7 @@ public class Renter {
     private String password;
     @Pattern(regexp = "^(?i)(male|female)$", message = "Gender must be 'male' or 'female'")
     private String gender;
+    private Boolean emailVerified=false;
 
 
     @ManyToOne

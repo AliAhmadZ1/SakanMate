@@ -11,5 +11,6 @@ public class RenterDtoOut {
     private String email;
     @Pattern(regexp = "^(?i)(male|female)$", message = "Gender must be 'male' or 'female'")
     private String gender;
+    private Boolean emailVerfied;
 
 }
