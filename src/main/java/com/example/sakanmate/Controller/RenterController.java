@@ -56,4 +56,16 @@ public class RenterController {
         return ResponseEntity.ok(renterService.getRentersByGender(gender));
     }
 
+
+    @PutMapping("/verify-email/{id}")
+    public ResponseEntity verifyEmail(@PathVariable Integer id, @RequestBody Integer code){
+        renterService.verifyEmail(id, code);
+        return ResponseEntity.status(200).body(new ApiResponse("your email verified successfully"));
+    }
+
+    @PostMapping("/resend-code/{id}")
+    public ResponseEntity resendCode(@PathVariable Integer id){
+        renterService.resendCode(id);
+        return ResponseEntity.status(200).body(new ApiResponse("new code sent"));
+    }
 }

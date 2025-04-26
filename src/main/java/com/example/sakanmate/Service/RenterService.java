@@ -6,12 +6,17 @@ import com.example.sakanmate.Model.*;
 import com.example.sakanmate.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 
 @Service
@@ -25,26 +30,33 @@ public class RenterService {
     private final ApartmentRepository apartmentRepository;
     private final ApartmentReviewRepository apartmentReviewRepository;
     private final OwnerRepository ownerRepository;
+    private final EmailVerificationCode emailVerificationCode;
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String senderEmail;
+
 
     public List<RenterDtoOut> getAllRenters() {
         List<Renter> renters = renterRepository.findAll();
         List<RenterDtoOut> renterDtoOuts = new ArrayList<>();
 
         for (Renter renter : renters) {
-            RenterDtoOut renterDtoOut = new RenterDtoOut(renter.getName(), renter.getEmail(),renter.getGender());
+            RenterDtoOut renterDtoOut = new RenterDtoOut(renter.getName(), renter.getEmail(),renter.getGender(),renter.getEmailVerified());
             renterDtoOuts.add(renterDtoOut);
         }
 
         return renterDtoOuts;
     }
 
+//    ----------------------------------------------------------------------------------------
+
     public void addRenter(Renter renter) {
+        sendCode(renter.getEmail());
         renterRepository.save(renter);
     }
+
+//    ----------------------------------------------------------------------------------------
 
     public void updateRenter(Integer renterId, Renter renter) {
         Renter tempRenterObject = renterRepository.findRenterById(renterId);
@@ -55,12 +67,14 @@ public class RenterService {
         tempRenterObject.setGender(renter.getGender());
         renterRepository.save(tempRenterObject);
     }
-
+//    ----------------------------------------------------------------------------------------
     public void deleteRenter(Integer renterId) {
         Renter renter = renterRepository.findRenterById(renterId);
         if (renter == null) throw new ApiException("Renter not found.");
         renterRepository.delete(renter);
     }
+
+//    ----------------------------------------------------------------------------------------
 
     //Ali Alshehri
     // makeReview endpoint
@@ -77,11 +91,63 @@ public class RenterService {
         apartmentReviewRepository.save(apartmentReview);
     }
 
+//    ----------------------------------------------------------------------------------------
+
     public List<Renter> getRentersByGender(String gender) {
         return renterRepository.findByGenderIgnoreCase(gender);
     }
 
+//    ----------------------------------------------------------------------------------------
 
+    //compare renter email with code email
+    public void verifyEmail(Integer id,Integer verifyingCode){
+        Renter renter = renterRepository.findRenterById(id);
+        EmailVerificationCodes code= emailVerificationCode.findEmailVerificationCodesByCode(verifyingCode);
+        if (renter==null)
+            throw new ApiException("this renter not found");
+        if (code==null)
+            throw new ApiException("not found please resend code");
+        if (!code.getEmail().equals(renter.getEmail()))
+            throw new ApiException("code is incorrect please resend code");
+        if (code.getExpirationDateTime().isBefore(LocalDateTime.now()))
+            throw new ApiException("code is expired");
+        renter.setEmailVerified(true);
+        emailVerificationCode.delete(code);
+    }
+
+//    ----------------------------------------------------------------------------------------
+
+    public void sendCode(String renterEmail){
+        Random random = new Random();
+        Integer code = random.nextInt(9999);
+        EmailVerificationCodes checkExist = emailVerificationCode.findEmailVerificationCodesByCode(code);
+        if (checkExist!=null)
+            throw new ApiException("code is duplicated");
+        EmailVerificationCodes generateCode = new EmailVerificationCodes();
+        generateCode.setCode(code);
+        generateCode.setEmail(renterEmail);
+        generateCode.setExpirationDateTime(LocalDateTime.now().plusMinutes(2));
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(senderEmail);
+        simpleMailMessage.setTo(renterEmail);
+        simpleMailMessage.setText("this is your verification code: "+code);
+        simpleMailMessage.setSubject("SkanMate verification email");
+        simpleMailMessage.setSentDate(Date.from(Instant.now()));
+        javaMailSender.send(simpleMailMessage);
+        emailVerificationCode.save(generateCode);
+        List<EmailVerificationCodes> expiredCodes = emailVerificationCode.checkExpiredCodes(LocalDateTime.now());
+        emailVerificationCode.deleteAll(expiredCodes);
+    }
+
+//    ----------------------------------------------------------------------------------------
+
+    // resend code
+    public void resendCode(Integer id){
+        Renter renter = renterRepository.findRenterById(id);
+        if (renter==null)
+            throw new ApiException("renter not found");
+        sendCode(renter.getEmail());
+    }
 
 
 }
