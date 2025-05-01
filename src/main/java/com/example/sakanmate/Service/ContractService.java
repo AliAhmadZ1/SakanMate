@@ -138,6 +138,7 @@ public class ContractService {
             throw new ApiException("Old contract not found");
         }
 
+//lkklk
         if (LocalDateTime.now().isBefore(oldContract.getEndDate())) {
             throw new ApiException("Current contract is still active");
         }
